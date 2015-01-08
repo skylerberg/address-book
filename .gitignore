@@ -1,0 +1,25 @@
+*.pyc
+
+/build
+
+# virtualenv
+bin
+include
+lib
+lib64
+
+# setuptools
+*.egg-info
+dist
+
+# tox
+*.tox
+
+# vim
+*.swp
+
+# coverage
+.coverage
+
+# sphinx
+doc/_build
