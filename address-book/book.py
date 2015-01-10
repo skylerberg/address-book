@@ -1,6 +1,18 @@
 
 import json
 
+# global constants
+# make it easy to change the name of the fields/attributes of Entry
+LNAME = "lname"
+FNAME = "fname"
+ADDR = "addr"
+CITY = "city"
+STATE = "state"
+ZIP_CODE = "zip_code"
+PHONE_NUM = "phone_num"
+EMAIL = "email"
+
+
 class BookEncoder(json.JSONEncoder):
     '''
     Encode :class:`Book` class object into json format
@@ -11,10 +23,9 @@ class BookEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 
-class Book():
+class Book:
     '''
     First implementation of an address book with very simple functionality.
-    For now, it can create new book, open a book, save a book, add entries, and print all the entries.
     '''
     def __init__(self, path = None): #a distinction between new book and opened book
         '''
@@ -27,14 +38,14 @@ class Book():
             f = open(path)
             book = json.loads(f.read())
             for entry in book["entries"]:
-                fname = entry["fname"]
-                lname = entry["lname"]
-                addr = entry["addr"]
-                city = entry["city"]
-                state = entry["state"]
-                zip_code = entry["zip_code"]
-                phone_num = entry["phone_num"]
-                email = entry["email"]
+                fname = entry[FNAME]
+                lname = entry[LNAME]
+                addr = entry[ADDR]
+                city = entry[CITY]
+                state = entry[STATE]
+                zip_code = entry[ZIP_CODE]
+                phone_num = entry[PHONE_NUM]
+                email = entry[EMAIL]
                 self.entries.append(Entry(fname,lname,addr,city,state,zip_code,phone_num,email))
             f.close()
             
@@ -65,6 +76,23 @@ class Book():
         json.dump(self,f,cls=BookEncoder)
         f.close()
 
+    def sort(self,attr):
+        '''
+        Sort the entries based on one of the attributes
+
+        :arg attr: The attribute to be based on
+        :type attr: String
+        '''
+
+        if attr == LNAME:
+            self.entries = sorted(self.entries,key=lambda entry:entry.__dict__[LNAME])
+        elif attr == FNAME:
+            self.entries = sorted(self.entries,key=lambda entry:entry.__dict__[FNAME])
+        elif attr == ZIP_CODE:
+            self.entries = sorted(self.entries,key=lambda entry:entry.__dict__[ZIP_CODE])
+        else:
+            print "Unimplemented!"
+
     def delete_entry(self):#to be implemented
         pass
 
@@ -77,18 +105,21 @@ class Entry:
         '''
         '''
         #kwargs: let user extend the fields
-        self.fname = fname
-        self.lname = lname
-        self.addr = addr
-        self.city = city
-        self.state = state
-        self.zip_code = zip_code
-        self.phone_num = phone_num
-        self.email = email
+        attr_d = dict()
+        attr_d[FNAME] = fname
+        attr_d[LNAME] = lname
+        attr_d[ADDR] = addr
+        attr_d[CITY] = city
+        attr_d[STATE] = state
+        attr_d[ZIP_CODE] = zip_code
+        attr_d[PHONE_NUM] = phone_num
+        attr_d[EMAIL] = email
+
+        self.__dict__.update(attr_d)
 
     def __str__(self):
         return ("firstname:%s  lastname:%s  addr:%s  city:%s  state:%s  zip:%s  phone#:%s  email:%s  ") \
-                % (self.fname, self.lname, self.addr, self.city, self.state, self.zip_code, self.phone_num, self.email)
+                % (self.__dict__[FNAME], self.__dict__[LNAME], self.__dict__[ADDR], self.__dict__[CITY], self.__dict__[STATE], self.__dict__[ZIP_CODE], self.__dict__[PHONE_NUM], self.__dict__[EMAIL])
 
 
 def main():
@@ -98,7 +129,7 @@ def main():
                \n2-Open a book\
                \n9-quit"
               
-        inp = raw_input()
+        inp = raw_input().strip()
         if not inp.isdigit():
             print "Invalid input!"
             continue
@@ -115,9 +146,10 @@ def main():
                     \n1-add entry\
                     \n2-print entry\
                     \n3-save as\
+                    \n4-sort by(fname, lname or zip_code)\
                     \n9-return to up level"
                     
-                inp2 = raw_input()
+                inp2 = raw_input().strip()
                 if not inp2.isdigit():
                     print "Invalid input!"
                     continue
@@ -137,6 +169,9 @@ def main():
                 elif choice2 == 3:
                     path = raw_input("file name:")
                     b.save_as(path)
+                elif choice2 == 4:
+                    attr = raw_input(("input '%s', '%s' or '%s':") % (FNAME,LNAME,ZIP_CODE))
+                    b.sort(attr)
                 elif choice2 == 9:
                     break
                 else:
