@@ -2,7 +2,9 @@
 import json
 
 # global constants
-# make it easy to change the name of the fields/attributes of Entry
+# make it easier to use the name of the attributes of Entry
+# and the key name in json file(those strings need to follow 
+# variable naming conventions,e.g. no space in between)
 LNAME = "lname"
 FNAME = "fname"
 ADDR = "addr"
@@ -15,7 +17,7 @@ EMAIL = "email"
 
 class BookEncoder(json.JSONEncoder):
     '''
-    Encode :class:`Book` class object into json format
+    Encode :class:`Book` object into json format
     '''
     def default(self, obj):
         if isinstance(obj, Book):
