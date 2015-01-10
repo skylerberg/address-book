@@ -42,7 +42,7 @@ class Book():
         '''
         Add an entry to the book
 
-        :arg entry: An object of Entry class, representing an address in an address book
+        :arg entry: An object of Entry class, representing an entry in an address book
         :type entry: Entry
         '''
         self.entries.append(entry)
@@ -50,9 +50,6 @@ class Book():
     def show_entry(self):
         '''
         Print all the entries in the book
-
-        :arg entry: An object of Entry class, representing an address in an address book
-        :type entry: Entry
         '''
         for entry in self.entries:
             print entry
@@ -61,8 +58,8 @@ class Book():
         '''
         Save the book into a file using json format
 
-        :arg entry: An object of Entry class, representing an address in an address book
-        :type entry: Entry
+        :arg path: The path to the file, if the file exists, it will be overwritten
+        :type path: String
         '''
         f = open(path,"w")
         json.dump(self,f,cls=BookEncoder)
@@ -76,10 +73,10 @@ class Entry:
     '''
     A class representing an entry in an address book
     '''
-    def __init__(self, fname, lname, addr=None, city=None, state=None, zip_code=None, phone_num=None, email=None):
+    def __init__(self, fname, lname, addr=None, city=None, state=None, zip_code=None, phone_num=None, email=None, **kwargs):
         '''
         '''
-        #todo let user extend the fields
+        #kwargs: let user extend the fields
         self.fname = fname
         self.lname = lname
         self.addr = addr
