@@ -64,8 +64,8 @@ class Book:
         '''
         Print all the entries in the book
         '''
-        for entry in self.entries:
-            print entry
+        for index,entry in enumerate(self.entries):
+            print index,entry
 
     def save_as(self,path):
         '''
@@ -95,8 +95,12 @@ class Book:
         else:
             print "Unimplemented!"
 
-    def delete_entry(self):#to be implemented
-        pass
+    def delete_entry(self,index):
+        '''
+        :arg index: The index of the entry to be deleted
+        :type index: Int
+        '''
+        entry = self.entries.pop(index) #save the deleted entry in case the user wants to withdraw
 
 
 class Entry:
@@ -120,7 +124,7 @@ class Entry:
         self.__dict__.update(attr_d)
 
     def __str__(self):
-        return ("firstname:%s  lastname:%s  addr:%s  city:%s  state:%s  zip:%s  phone#:%s  email:%s  ") \
+        return ("firstname:%s\tlastname:%s\taddr:%s\tcity:%s\tstate:%s\tzip:%s\tphone#:%s\temail:%s") \
                 % (self.__dict__[FNAME], self.__dict__[LNAME], self.__dict__[ADDR], self.__dict__[CITY], self.__dict__[STATE], self.__dict__[ZIP_CODE], self.__dict__[PHONE_NUM], self.__dict__[EMAIL])
 
 
@@ -149,6 +153,7 @@ def main():
                     \n2-print entry\
                     \n3-save as\
                     \n4-sort by(fname, lname or zip_code)\
+                    \n5-delete an entry(by index based on print)\
                     \n9-return to up level"
                     
                 inp2 = raw_input().strip()
@@ -174,6 +179,16 @@ def main():
                 elif choice2 == 4:
                     attr = raw_input(("input '%s', '%s' or '%s':") % (FNAME,LNAME,ZIP_CODE))
                     b.sort(attr)
+                elif choice2 == 5:
+                    l = len(b.entries)
+                    if l == 0:
+                        print "Nothing left!"
+                        continue
+                    index = raw_input("input 0-"+str(l-1)+":")
+                    if not index.isdigit() or int(index)<0 or int(index) > l-1:
+                        print "Invalid input!"
+                        continue
+                    b.delete_entry(int(index))
                 elif choice2 == 9:
                     break
                 else:
