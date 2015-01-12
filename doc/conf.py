@@ -15,6 +15,8 @@
 import sys
 import os
 
+import sphinx_rtd_theme
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
@@ -48,7 +50,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Address Book'
-copyright = u'2015, Skyler Berg'
+copyright = u'2015, long john_silver[5] (CIS 422 team)'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -102,7 +104,7 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'default'
+html_theme = 'sphinx_rtd_theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -110,7 +112,7 @@ html_theme = 'default'
 #html_theme_options = {}
 
 # Add any paths that contain custom themes here, relative to this directory.
-#html_theme_path = []
+html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
@@ -201,7 +203,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
   ('index', 'AddressBook.tex', u'Address Book Documentation',
-   u'Skyler Berg', 'manual'),
+   u'long john_silver[5]', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -231,7 +233,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'addressbook', u'Address Book Documentation',
-     [u'Skyler Berg'], 1)
+     [u'long john_silver[5]'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -245,7 +247,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
   ('index', 'AddressBook', u'Address Book Documentation',
-   u'Skyler Berg', 'AddressBook', 'One line description of project.',
+   u'long john_silver[5]', 'AddressBook', 'A program for storing addresses.',
    'Miscellaneous'),
 ]
 
