@@ -35,6 +35,8 @@ class Book:
         '''
         :arg path: Path to the file to be opened.
         :type path: String
+
+        :raises IOError: if the file cannot be read.
         '''
         # self.num_fields  may be needed for supporting customized fileds
         self.entries = []
@@ -108,7 +110,32 @@ class Book:
 
     def delete_entry(self, index):
         '''
+        Delete an entry from the book
+
         :arg index: The index of the entry to be deleted
         :type index: Int
         '''
         entry = self.entries.pop(index)  # save the deleted entry in case the user wants to withdraw
+
+    def edit_entry(self,index,attr,value):
+        '''
+        Edit an existing entry in the book
+
+        :arg index: The index of the entry to be edited
+        :arg attr: The attribute of the entry to be edited
+        :arg value: The new value for the target attribute
+        :type index: Int
+        :type attr: String
+        :type value: String
+
+        '''
+        self.entries[index].set_attr(attr,value)
+
+    def size(self):
+        '''
+        Get the number of entries in the book
+
+        :returns: Number of entries in the book
+        :rtype: Int
+        '''
+        return len(self.entries)
