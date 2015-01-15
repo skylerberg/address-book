@@ -7,6 +7,8 @@ bin
 include
 lib
 lib64
+local
+pip-selfcheck.json
 
 # setuptools
 *.egg-info
@@ -23,3 +25,6 @@ dist
 
 # sphinx
 doc/_build
+
+# nose
+man
