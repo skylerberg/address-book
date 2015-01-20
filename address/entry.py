@@ -7,8 +7,8 @@ class Entry:
     '''
 
     def __init__(self,
-                 fname,
-                 lname,
+                 fname=None,
+                 lname=None,
                  addr=None,
                  city=None,
                  state=None,
@@ -42,6 +42,22 @@ class Entry:
                self.__dict__[PHONE_NUM],
                self.__dict__[EMAIL])
 
+    def get_attr(self, attr):
+        '''
+        Get the value associated with a field name.
+        :arg attr: The attribute of the entry to be returned
+        :type attr: String
+
+        :returns: The value associated with `attr`.
+        :rtype: String
+
+        :raises KeyError: when trying to get a field that does not exist.
+        '''
+        if attr in self.__dict__:
+            return self.__dict__[attr]
+        else:
+            raise KeyError("No field '{0}' in entry.".format(attr))
+
     def set_attr(self, attr, value):
         '''
         Edit an attribute in the entry
@@ -50,8 +66,10 @@ class Entry:
         :arg value: The new value for the target attribute
         :type attr: String
         :type value: String
+
+        :raises KeyError: when trying to set a field that does not exist.
         '''
         if attr in self.__dict__.keys():
             self.__dict__[attr] = value
         else:
-            print "Unimplemented!"
+            raise KeyError("No field '{0}' in entry.".format(attr))
