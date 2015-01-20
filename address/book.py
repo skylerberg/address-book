@@ -3,9 +3,10 @@ import json
 from entry import Entry
 from constants import *
 
+
 class BookEncoder(json.JSONEncoder):
     '''
-    Encode :class:`Book` object into json format
+    Encode :class:`Book` object into JSON format.
     '''
     def default(self, obj):
         if isinstance(obj, Book):
@@ -17,6 +18,7 @@ class Book:
     '''
     First implementation of an address book with very simple functionality.
     '''
+
     def __init__(self, path=None):  # a distinction between new book and opened book
         '''
         :arg path: Path to the file to be opened.
@@ -103,7 +105,7 @@ class Book:
         '''
         entry = self.entries.pop(index)  # save the deleted entry in case the user wants to withdraw
 
-    def edit_entry(self,index,attr,value):
+    def edit_entry(self, index, attr, value):
         '''
         Edit an existing entry in the book
 
@@ -115,7 +117,7 @@ class Book:
         :type value: String
 
         '''
-        self.entries[index].set_attr(attr,value)
+        self.entries[index].set_attr(attr, value)
 
     def size(self):
         '''

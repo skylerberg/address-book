@@ -26,7 +26,7 @@ def main():
                     path = raw_input("book path:").strip()
                     b = Book(path)
                 except IOError:
-                    sys.stderr.write("\nFile '%s' cannot be read!\n"%path)
+                    sys.stderr.write("\nFile '%s' cannot be read!\n" % path)
                     continue
             while True:
                 print "\nSelect an action for the book: \
@@ -53,7 +53,8 @@ def main():
                     path = raw_input("file name:").strip()
                     b.save_as(path)
                 elif choice2 == 4:
-                    attr = raw_input(("input '%s', '%s' or '%s':") % (FNAME, LNAME, ZIP_CODE)).strip()
+                    attr = raw_input(("input '%s', '%s' or '%s':")
+                                     % (FNAME, LNAME, ZIP_CODE)).strip()
                     b.sort(attr)
                 elif choice2 == 5:
                     l = b.size()
@@ -74,10 +75,10 @@ def main():
                     if not index.isdigit() or int(index) < 0 or int(index) > l-1:
                         print "Invalid input!"
                         continue
-                    attr = raw_input(("select an attribute to edit '%s', '%s', '%s', '%s', '%s', '%s', '%s' or '%s':") % (FNAME, LNAME,ADDR,CITY,STATE,ZIP_CODE,PHONE_NUM,EMAIL)).strip()
+                    attr = raw_input(("select an attribute to edit '%s', '%s', '%s', '%s', '%s', '%s', '%s' or '%s':") % (FNAME, LNAME, ADDR, CITY, STATE, ZIP_CODE, PHONE_NUM, EMAIL)).strip()
                     value = raw_input("input an value for %s:" % attr) .strip()
-                    if utility.validate(attr,value):
-                        b.edit_entry(int(index),attr,value)
+                    if utility.validate(attr, value):
+                        b.edit_entry(int(index), attr, value)
                     else:
                         print ("\nInvalid value for %s!") % attr
                 elif choice2 == 9:
