@@ -5,12 +5,7 @@ import address.entry
 
 class TestTest(unittest.TestCase):
     """
-    This class is meant to make sure that travis and coveralls are working
-    properly.
     """
-
-    def setUp(self):
-        pass
 
     def test_no_values(self):
         address.entry.Entry()
@@ -38,6 +33,3 @@ class TestTest(unittest.TestCase):
         entry = address.entry.Entry()
         with self.assertRaises(KeyError):
             entry.set_attr("undefined", "value")
-
-    def tearDown(self):
-        pass
