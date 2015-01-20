@@ -30,15 +30,3 @@ def validate(attr, string):  # return value may need to be improved
         return re.match(r"^\d{5}$|^\d{5}-\d{4}$", string)
     else:
         return True  # if the check is unimplememted, return true for now
-
-
-def test():
-    print validate(EMAIL, "a#b@abc.com")
-    print validate(EMAIL, "abcde@gmail.com")
-    print validate(ADDR, "123 15th ave apt 11")
-    print validate(ADDR, "123 15th ave")
-    print validate(ZIP_CODE, "12345")
-    print validate(ZIP_CODE, "12345-3456")
-
-if __name__ == "__main__":
-    test()
