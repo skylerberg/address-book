@@ -3,8 +3,9 @@ import unittest
 from address import Book
 
 
-class TestTest(unittest.TestCase):
+class TestBook(unittest.TestCase):
     """
+    Test the Book class.
     """
 
     def test_book_initial_size(self):

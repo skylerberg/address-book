@@ -3,8 +3,9 @@ import unittest
 import address.entry
 
 
-class TestTest(unittest.TestCase):
+class TestEntry(unittest.TestCase):
     """
+    Test the Entry class.
     """
 
     def test_no_values(self):
