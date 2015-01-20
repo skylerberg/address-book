@@ -119,7 +119,7 @@ class Book:
         '''
         self.entries[index].set_attr(attr, value)
 
-    def size(self):
+    def __len__(self):
         '''
         Get the number of entries in the book
 

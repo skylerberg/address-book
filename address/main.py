@@ -57,7 +57,7 @@ def main():
                                      % (FNAME, LNAME, ZIP_CODE)).strip()
                     b.sort(attr)
                 elif choice2 == 5:
-                    l = b.size()
+                    l = len(b)
                     if l == 0:
                         print "Nothing left!"
                         continue
@@ -67,7 +67,7 @@ def main():
                         continue
                     b.delete_entry(int(index))
                 elif choice2 == 6:
-                    l = b.size()
+                    l = len(b)
                     if l == 0:
                         print "Nothing to edit!"
                         continue
