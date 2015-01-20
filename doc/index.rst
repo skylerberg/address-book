@@ -11,6 +11,8 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   pages/arch.rst
+   pages/qa.rst
    pages/reference.rst
 
 
