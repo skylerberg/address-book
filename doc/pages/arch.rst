@@ -14,13 +14,17 @@ The code will consist of the following components:
 
 Dependencies for each component are shown below.
 
-File operations -> Data types
-CRUD operations -> Data types
-Views -> Data types
-Interface -> Data types
-Interface -> File operations
-Interface -> CRUD operations
-Interface -> Views
+.. graphviz::
+
+  digraph arch {
+    "File operations" -> "Data types";
+    "CRUD operations" -> "Data types";
+    "Views" -> "Data types";
+    "Interface" -> "Data types";
+    "Interface" -> "File operations";
+    "Interface" -> "CRUD operations";
+    "Interface" -> "Views";
+  }
 
 
 Data types
