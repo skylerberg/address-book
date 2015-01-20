@@ -1,4 +1,8 @@
-## Overview
+QA Plan
+=======
+
+Overview
+--------
 
 We plan to automate as much of the testing as possible to avoid human error and to allow us to test more often.
 We will be using Travis-CI to run our test suite every time code is checked in.
