@@ -73,3 +73,14 @@ class Entry:
             self.__dict__[attr] = value
         else:
             raise KeyError("No field '{0}' in entry.".format(attr))
+
+    def __eq__(self,other):#to be tested
+        '''
+        Equality test between two entries. Two entries are equal when they have same fields with same values
+
+        :arg other: The other entry to be compared with the current one
+        :type other: Entry
+        '''
+        return self.__dict__ == other.__dict__
+
+    #def __hash__(self): may not be needed 

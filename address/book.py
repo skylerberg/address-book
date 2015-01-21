@@ -16,7 +16,7 @@ class BookEncoder(json.JSONEncoder):
 
 class Book:
     '''
-    First implementation of an address book with very simple functionality.
+    Implementation of an address book. 
     '''
 
     def __init__(self, path=None):  # a distinction between new book and opened book
@@ -127,3 +127,84 @@ class Book:
         :rtype: Int
         '''
         return len(self.entries)
+
+    def import_from(self,path):# for now, only the required ones
+        '''
+        Import address from a tsv file
+
+        :arg path: Path to the file to be imported.
+        :type path: String
+
+        :raises IOError: if the file cannot be read.
+        '''
+        f = open(path)
+        for line in f:
+            fields = line.rstrip().split("\t")
+            city,state,zip_code = fields[0].split("  ")#use 2 spaces(in case city name is two-word, or city/state is missing)
+            addr = fields[1] +" " + fields[2]
+            fname = fields[3].split("  ")[0]
+            lname = fields[3].split("  ")[1]
+            phone_num = fields[4]
+            email = fields[5]
+            self.entries.append(Entry(fname,
+                                      lname,
+                                      addr,
+                                      city,
+                                      state,
+                                      zip_code,
+                                      phone_num,
+                                      email
+                                      ))
+        f.close()
+
+    def export_to(self,indexes, path):
+        '''
+        Export address to a tsv file
+
+        :arg path: Path of the destination file.
+        :arg indexes: Indexes of the entries to be exported
+        :type path: String
+        :type indexes: List of Int
+
+        :raises IOError: if the file cannot be read.
+        '''
+        f = open(path,"w")
+        for i in indexes:
+            entry = self.entries[i]
+            last = entry.get_attr(CITY) + "  " + entry.get_attr(STATE) + "  " + entry.get_attr(ZIP_CODE)#use 2 spaces
+            delivery = entry.get_attr(ADDR)
+            second = ""
+            recipient = entry.get_attr(FNAME) + "  " + entry.get_attr(LNAME)#use 2 spaces
+            phone = entry.get_attr(PHONE_NUM)
+            email = entry.get_attr(EMAIL)
+            f.write(("%s\t%s\t%s\t%s\t%s\t%s\n")%(last,delivery,second,recipient,phone,email))
+        f.close()
+
+    def merge(self,other):#to be tested
+        '''
+        Merge two address books, removing duplicated entries, all the entries are merged into the current book
+
+        :arg other: The other book to be merged with the current one
+        :type string: Book
+        '''
+        for entry in other.entries:
+            if not entry in self.entries:
+                self.add_entry(entry)
+
+    def search(self,string):
+        '''
+        Search all the entries containing a specific string in the address book 
+
+        :arg string: the string to be searched
+        :type string: String
+
+        :returns: A list of entries containing the string
+        :rtype: List
+        '''
+        matches = []
+        for entry in self.entries:
+            for key in entry.__dict__:
+                if (entry.__dict__[key] is not None) and (string.lower() in entry.__dict__[key].lower()):
+                    matches.append(entry)
+                    break
+        return matches
