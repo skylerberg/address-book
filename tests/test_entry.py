@@ -38,9 +38,9 @@ class TestEntry(unittest.TestCase):
     def test_compare_different_entries(self):
         entry1 = address.entry.Entry("William","Bill","1 1st street apt 1")
         entry2 = address.entry.Entry("William","Bill","1 1st street apt 2")
-        seelf.assertFalse(entry1 == entry2)
+        self.assertFalse(entry1 == entry2)
 
     def test_compare_same_entries(self):
         entry1 = address.entry.Entry("William","Bill","1 1st street apt 1")
         entry2 = address.entry.Entry("William","Bill","1 1st street apt 1")
-        seelf.assertTrue(entry1 == entry2)
+        self.assertTrue(entry1 == entry2)
