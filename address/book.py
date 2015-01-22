@@ -24,8 +24,6 @@ class Book:
         '''
         :arg path: Path to the file to be opened.
         :type path: String
-
-        :raises IOError: if the file cannot be read.
         '''
         # self.num_fields  may be needed for supporting customized fileds
         self.entries = []
@@ -112,6 +110,9 @@ class Book:
 
         :arg index: The index of the entry to be returned
         :type index: Int
+
+        :returns: An entry in the book
+        :rtype: Entry
         '''
         return self.entries[index]
 
@@ -144,8 +145,6 @@ class Book:
 
         :arg path: Path to the file to be imported.
         :type path: String
-
-        :raises IOError: if the file cannot be read.
         '''
         f = open(path)
         reader = csv.reader(f,delimiter="\t")
@@ -176,8 +175,6 @@ class Book:
         :arg indexes: Indexes of the entries to be exported
         :type path: String
         :type indexes: List of Int
-
-        :raises IOError: if the file cannot be read.
         '''
         f = open(path,"w")
         writer = csv.writer(f,delimiter="\t")
@@ -203,7 +200,7 @@ class Book:
         Merge two address books, removing duplicated entries, all the entries are merged into the current book
 
         :arg other: The other book to be merged with the current one
-        :type string: Book
+        :type other: Book
         '''
         for entry in other.entries:
             if not entry in self.entries:
