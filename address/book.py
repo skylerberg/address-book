@@ -1,4 +1,5 @@
 import json
+import csv
 
 from entry import Entry
 from constants import *
@@ -128,7 +129,7 @@ class Book:
         '''
         return len(self.entries)
 
-    def import_from(self,path):# for now, only the required ones
+    def import_from(self,path):
         '''
         Import address from a tsv file
 
@@ -138,22 +139,23 @@ class Book:
         :raises IOError: if the file cannot be read.
         '''
         f = open(path)
-        for line in f:
-            fields = line.rstrip().split("\t")
-            city,state,zip_code = fields[0].split("  ")#use 2 spaces(in case city name is two-word, or city/state is missing)
-            addr = fields[1] +" " + fields[2]
-            fname = fields[3].split("  ")[0]
-            lname = fields[3].split("  ")[1]
-            phone_num = fields[4]
-            email = fields[5]
+        reader = csv.reader(f,delimiter="\t")
+        for row in reader:
+            assert(len(row) == 5)#assumption of the input format, for now
+            city,state,zip_code = row[0].split("  ")#use 2 spaces(in case city name is two-word, or city/state is missing)
+            addr = row[1] +" " + row[2]
+            fname = row[3].split("  ")[0]
+            lname = row[3].split("  ")[1]
+            phone_num = row[4]
+            #email = row[5]
             self.entries.append(Entry(fname,
                                       lname,
                                       addr,
                                       city,
                                       state,
                                       zip_code,
-                                      phone_num,
-                                      email
+                                      phone_num
+                                      #email
                                       ))
         f.close()
 
@@ -169,18 +171,25 @@ class Book:
         :raises IOError: if the file cannot be read.
         '''
         f = open(path,"w")
+        writer = csv.writer(f,delimiter="\t")
         for i in indexes:
             entry = self.entries[i]
-            last = entry.get_attr(CITY) + "  " + entry.get_attr(STATE) + "  " + entry.get_attr(ZIP_CODE)#use 2 spaces
+            city = entry.get_attr(CITY) or ''
+            state = entry.get_attr(STATE) or ''
+            zip_code = entry.get_attr(ZIP_CODE) or ''
+            last = city + "  " + state + "  " + zip_code#use 2 spaces
             delivery = entry.get_attr(ADDR)
             second = ""
-            recipient = entry.get_attr(FNAME) + "  " + entry.get_attr(LNAME)#use 2 spaces
+            fname = entry.get_attr(FNAME) or ''
+            lname = entry.get_attr(LNAME) or ''
+            recipient = fname + "  " + lname#use 2 spaces
             phone = entry.get_attr(PHONE_NUM)
-            email = entry.get_attr(EMAIL)
-            f.write(("%s\t%s\t%s\t%s\t%s\t%s\n")%(last,delivery,second,recipient,phone,email))
+            #email = entry.get_attr(EMAIL) or ''
+            writer.writerow([last,delivery,second,recipient,phone])
+            #writer.writerow([last,delivery,second,recipient,phone,email])
         f.close()
 
-    def merge(self,other):#to be tested
+    def merge(self,other):
         '''
         Merge two address books, removing duplicated entries, all the entries are merged into the current book
 
