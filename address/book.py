@@ -106,6 +106,15 @@ class Book:
         '''
         entry = self.entries.pop(index)  # save the deleted entry in case the user wants to withdraw
 
+    def get_entry(self,index):
+        '''
+        Return an entry from the book based on index
+
+        :arg index: The index of the entry to be returned
+        :type index: Int
+        '''
+        return self.entries[index]
+
     def edit_entry(self, index, attr, value):
         '''
         Edit an existing entry in the book

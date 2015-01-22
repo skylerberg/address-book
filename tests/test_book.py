@@ -28,7 +28,7 @@ class TestBook(unittest.TestCase):
         book = Book()
         book.add_entry(en1)
         book.add_entry(en2)
-        book.delete_entry(en1)
+        book.delete_entry(0)
         self.assertEquals(len(book), 1)
 
     def test_book_edit_entry(self):
@@ -36,7 +36,7 @@ class TestBook(unittest.TestCase):
         book = Book()
         book.add_entry(en1)
         book.edit_entry(0,address.entry.FNAME,"William")
-        self.assertEquals(entry.get_attr(address.entry.FNAME), "William")
+        self.assertEquals(book.get_entry(0).get_attr(address.entry.FNAME), "William")
 
     def test_book_merge_two_books_with_duplicated_entries(self):
         book1 = Book()
