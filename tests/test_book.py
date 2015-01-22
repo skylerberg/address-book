@@ -57,9 +57,9 @@ class TestBook(unittest.TestCase):
         en1 = address.entry.Entry("Stephanie","Nichols","3018 Annamark Lane")
         en2 = address.entry.Entry("stephanie","nichols","3018 annamark lane")
         en3 = address.entry.Entry("Thomas","Meyer","3018 Annamark Lane STE 4")
-        book1.add_entry(en1)
-        book1.add_entry(en2)
-        book1.add_entry(en3)
-        ret = book1.search("ste")
+        book.add_entry(en1)
+        book.add_entry(en2)
+        book.add_entry(en3)
+        ret = book.search("ste")
         self.assertEquals(len(ret), 3)
 
