@@ -1,9 +1,16 @@
+"""
+Window for viewing and editing an address book.
+"""
 import Tkinter as tk
 
-from address.constants import *
+from address.constants import main_tk_root
 
 
 class MainWindow(object):
+    """
+    Main window class. This window displays the address book and allows the
+    user to perform basic CRUD operations.
+    """
 
     def __init__(self, parent, name, metadata):
         self.parent = parent
@@ -22,19 +29,22 @@ class MainWindow(object):
         self.show()
 
     def show(self):
-        tk.Label(self.top, text="Addresses Book "+self.name, font=("Helvetica", 16)).pack(padx=5, pady=5)
-        listFrame = tk.Frame(self.top)
-        listFrame.pack(side=tk.TOP, padx=0, pady=0)          
-        scrollBar = tk.Scrollbar(listFrame)
-        scrollBar.pack(side=tk.RIGHT, fill=tk.Y)
-        self.listBox = tk.Listbox(listFrame, selectmode=tk.SINGLE, width=150, height=38)
-        self.listBox.pack(side=tk.LEFT, fill=tk.Y)
-        scrollBar.config(command=self.listBox.yview)
-        self.listBox.config(yscrollcommand=scrollBar.set)
+        tk.Label(self.top,
+                 text="Addresses Book "+self.name,
+                 font=("Helvetica", 16)
+                 ).pack(padx=5, pady=5)
+        list_frame = tk.Frame(self.top)
+        list_frame.pack(side=tk.TOP, padx=0, pady=0)
+        scroll_bar = tk.Scrollbar(list_frame)
+        scroll_bar.pack(side=tk.RIGHT, fill=tk.Y)
+        self.list_box = tk.Listbox(list_frame, selectmode=tk.SINGLE, width=150, height=38)
+        self.list_box.pack(side=tk.LEFT, fill=tk.Y)
+        scroll_bar.config(command=self.list_box.yview)
+        self.list_box.config(yscrollcommand=scroll_bar.set)
         self.address.sort()
 
         for item in self.address:
-            self.listBox.insert(tk.END, item)
+            self.list_box.insert(tk.END, item)
 
     def build_submenus(self):
         self.add_file_menu()
@@ -57,7 +67,12 @@ class MainWindow(object):
     def add_tool_menu(self):
         fmenu = tk.Menu(self._menu, name='fmenu')
         self._menu.add_cascade(label='Tools', menu=fmenu, underline=0)
-        labels = ('Add entry', 'Delete entry', 'Edit entry', 'Search field', 'Print postal...', "Sort by...")
+        labels = ('Add entry',
+                  'Delete entry',
+                  'Edit entry',
+                  'Search field',
+                  'Print postal...',
+                  "Sort by...")
         fmenu.add_command(label=labels[0], command=lambda m=labels[0]: self.addE())
         fmenu.add_command(label=labels[1], command=lambda m=labels[1]: self.deleteE())
         fmenu.add_command(label=labels[2], command=lambda m=labels[2]: self.editE())
@@ -111,8 +126,8 @@ class MainWindow(object):
         Chooses correct file to open
         """
         try:
-            firstIndex = self.listBox.curselection()[0]
-            value = self.metadata[int(firstIndex)]
+            first_index = self.list_box.curselection()[0]
+            value = self.metadata[int(first_index)]
             self.top.destroy()
             self.name = value
             event
@@ -122,7 +137,7 @@ class MainWindow(object):
             self.top.destroy()
 
     def _cancel(self, event=None):
-        """ if not right close and they need to reopen"""
+        """if not right close and they need to reopen"""
         self.top.destroy()
 
     def newl(self):
@@ -266,19 +281,19 @@ class MainWindow(object):
         main_tk_root[1].update()
 
     def deleteE(self):
-        firstIndex = self.listBox.curselection()[0]
-        value = self.address[int(firstIndex)]
+        first_index = self.list_box.curselection()[0]
+        value = self.address[int(first_index)]
         print value
-        self.address.pop(int(firstIndex))
+        self.address.pop(int(first_index))
         #self.deleteShow()
         #self.show()
-        self.listBox.delete(int(firstIndex))
+        self.list_box.delete(int(first_index))
         main_tk_root[1].update()
         print self.address
 
     def editE(self):
-        firstIndex = self.listBox.curselection()[0]
-        self.value = self.address[int(firstIndex)]
+        first_index = self.list_box.curselection()[0]
+        self.value = self.address[int(first_index)]
         self.top = tk.Toplevel(self.parent)
 
         tk.Label(self.top, text=" First Name ").pack(padx=20, pady=10)
@@ -313,7 +328,7 @@ class MainWindow(object):
         self.e8 = tk.Entry(self.top)
         self.e8.insert(0, "Email")
         self.e8.pack(padx=5)
-        self.index = int(firstIndex)
+        self.index = int(first_index)
         print "edit"
         b = tk.Button(self.top, text="okay", command=self.getEditEntry)
         b.pack(pady=5)
@@ -329,8 +344,8 @@ class MainWindow(object):
         email = self.e8.get()
         self.address[self.index] = first + last+address+city
         self.top.destroy()
-        self.listBox.delete(int(self.index))
-        self.listBox.insert(tk.END, self.address[self.index])
+        self.list_box.delete(int(self.index))
+        self.list_box.insert(tk.END, self.address[self.index])
         self.address.sort()
         main_tk_root[1].update()
         print self.address[self.index]
@@ -360,8 +375,8 @@ class MainWindow(object):
         main_tk_root[1].update()
 
     def printPostalE(self):
-        firstIndex = self.listBox.curselection()[0]
-        value = self.address[int(firstIndex)]
+        first_index = self.list_box.curselection()[0]
+        value = self.address[int(first_index)]
         print "print postal"
         # do the postal rewriting and make it a string
         self.top = tk.Toplevel(self.parent)

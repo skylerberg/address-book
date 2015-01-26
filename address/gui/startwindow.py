@@ -1,10 +1,15 @@
-import address.book as book
+"""
+Initial window when the application is launched.
+"""
 import Tkinter as tk
-import tkFileDialog
-from address.constants import *
+
+from address.constants import main_tk_root
 from address.gui.mainwindow import MainWindow
 
-class StartWindow:
+class StartWindow(object):
+    """
+    First window that allows users to create, import or open address books.
+    """
 
     def __init__(self, parent):
         self.parent = parent
@@ -13,12 +18,18 @@ class StartWindow:
 
         self.name = ""
         print self.name
-        b = tk.Button(parent, text="new", command=self.new, height=5, width=20)
-        b.pack(pady=30)
-        b = tk.Button(parent, text="openfile", command=self.openfile, height=5, width=20)
-        b.pack(pady=30)
-        b = tk.Button(parent, text="import", command=self.importl, height=5, width=20)
-        b.pack(pady=30)
+        new_button = tk.Button(parent,
+                               text="new",
+                               command=self.new, height=5, width=20)
+        new_button.pack(pady=30)
+        open_button = tk.Button(parent,
+                                text="openfile",
+                                command=self.openfile, height=5, width=20)
+        open_button.pack(pady=30)
+        import_button = tk.Button(parent,
+                                  text="import",
+                                  command=self.importl, height=5, width=20)
+        import_button.pack(pady=30)
 
     def new(self):
         """
@@ -31,8 +42,8 @@ class StartWindow:
         self.e = tk.Entry(self.top)
         self.e.pack(padx=25)
 
-        b = tk.Button(self.top, text="okay", command=self.okay)
-        b.pack(pady=5)
+        okay_button = tk.Button(self.top, text="okay", command=self.okay)
+        okay_button.pack(pady=5)
 
     def importl(self):
         """
@@ -62,24 +73,28 @@ class StartWindow:
             self.top.grab_set()
             self.top.bind("<Return>", self._choose)
             tk.Label(self.top, text="open file").pack(padx=5, pady=5)
-            listFrame = tk.Frame(self.top)
-            listFrame.pack(side=tk.TOP, padx=5, pady=5)
-            scrollBar = tk.Scrollbar(listFrame)
-            scrollBar.pack(side=tk.RIGHT, fill=tk.Y)
-            self.listBox = tk.Listbox(listFrame, selectmode=tk.SINGLE)
-            self.listBox.pack(side=tk.LEFT, fill=tk.Y)
-            scrollBar.config(command=self.listBox.yview)
-            self.listBox.config(yscrollcommand=scrollBar.set)
+            list_frame = tk.Frame(self.top)
+            list_frame.pack(side=tk.TOP, padx=5, pady=5)
+            scroll_bar = tk.Scrollbar(list_frame)
+            scroll_bar.pack(side=tk.RIGHT, fill=tk.Y)
+            self.list_box = tk.Listbox(list_frame, selectmode=tk.SINGLE)
+            self.list_box.pack(side=tk.LEFT, fill=tk.Y)
+            scroll_bar.config(command=self.list_box.yview)
+            self.list_box.config(yscrollcommand=scroll_bar.set)
             self.metadata.sort()
 
             for item in self.metadata:
-                self.listBox.insert(tk.END, item)
-            buttonFrame = tk.Frame(self.top)
-            buttonFrame.pack(side=tk.BOTTOM)
-            chooseButton = tk.Button(buttonFrame, text="Choose", command=self._choose)
-            chooseButton.pack()
-            cancelButton = tk.Button(buttonFrame, text="Cancel", command=self._cancel)
-            cancelButton.pack(side=tk.RIGHT)
+                self.list_box.insert(tk.END, item)
+            button_frame = tk.Frame(self.top)
+            button_frame.pack(side=tk.BOTTOM)
+            choose_button = tk.Button(button_frame,
+                                      text="Choose",
+                                      command=self._choose)
+            choose_button.pack()
+            cancel_button = tk.Button(button_frame,
+                                     text="Cancel",
+                                     command=self._cancel)
+            cancel_button.pack(side=tk.RIGHT)
 
         else:
             print self.name + "a new file or imported file"
@@ -99,15 +114,15 @@ class StartWindow:
         main_tk_root[1].update()
         self.parent = root2
 
-        d = MainWindow(main_tk_root[1], self.name, self.metadata)
+        MainWindow(main_tk_root[1], self.name, self.metadata)
 
     def _choose(self, event=None):
         """
         Chooses correct file to open
         """
         try:
-            firstIndex = self.listBox.curselection()[0]
-            value = self.metadata[int(firstIndex)]
+            first_index = self.list_box.curselection()[0]
+            value = self.metadata[int(first_index)]
             self.top.destroy()
             self.name = value
             self.openl()
