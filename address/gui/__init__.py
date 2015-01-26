@@ -1,11 +1,12 @@
-from Tkinter import *
+import Tkinter as tk
+
 from address.constants import *
 from address.gui.startwindow import StartWindow
 
 
 def main():
-    root = Tk()
-    root.geometry("500x450+300+300")    
+    root = tk.Tk()
+    root.geometry("500x450+300+300")
     root.title("Team 2 Address Book")
     main_tk_root[1] = root
     main_tk_root[1].update()

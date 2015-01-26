@@ -11,4 +11,4 @@ ZIP_CODE = "zip_code"
 PHONE_NUM = "phone_num"
 EMAIL = "email"
 
-main_tk_root = [True, ""]
+main_tk_root = [True, None]
