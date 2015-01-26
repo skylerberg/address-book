@@ -1,6 +1,6 @@
-import book
+import address.book as book
+from address.constants import *
 from Tkinter import *
-from constants import *
 
 
 class MainWindow:

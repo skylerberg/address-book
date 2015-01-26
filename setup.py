@@ -7,6 +7,6 @@ setup(
     version=address.__version__,
     long_description=open(join(dirname(__file__), 'README.md')).read(),
     entry_points={
-        'console_scripts': ['address = address.main:main']
+        'console_scripts': ['address = address.gui:main']
         },
     )

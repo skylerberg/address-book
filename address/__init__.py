@@ -1,4 +1,4 @@
-import main
+import gui
 from book import Book
 from entry import Entry
 

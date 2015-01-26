@@ -1,6 +1,6 @@
 from Tkinter import *
-from constants import *
-from startwindow import StartWindow
+from address.constants import *
+from address.gui.startwindow import StartWindow
 
 
 def main():

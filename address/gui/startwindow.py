@@ -1,8 +1,8 @@
-import book
+import address.book as book
 from Tkinter import *
-from constants import *
 import tkFileDialog
-from mainwindow import MainWindow
+from address.constants import *
+from address.gui.mainwindow import MainWindow
 
 class StartWindow:
 
