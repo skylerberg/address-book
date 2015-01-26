@@ -25,10 +25,7 @@ class MainWindow(object):
         self._menu = tk.Menu(self.parent, name='menu')
         self.build_submenus()
         self.top.config(menu=self._menu)
-        #self.top.grab_set()
-        self.show()
-
-    def show(self):
+        #self.top.grab_set() self.show() def show(self):
         tk.Label(self.top,
                  text="Addresses Book "+self.name,
                  font=("Helvetica", 16)
@@ -276,7 +273,7 @@ class MainWindow(object):
         email = self.e8.get()
         self.address.append(first + last+address+city)
         self.top.destroy()
-        self.listBox.insert(tk.END, self.address[-1])
+        self.list_box.insert(tk.END, self.address[-1])
         self.address.sort()
         main_tk_root[1].update()
 
