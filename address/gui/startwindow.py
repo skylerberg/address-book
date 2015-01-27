@@ -3,6 +3,7 @@ Initial window when the application is launched.
 """
 import Tkinter as tk
 import tkFileDialog
+import os
 
 #from address.constants import main_tk_root
 from address.constants import *
@@ -44,7 +45,7 @@ class StartWindow(object):
         self.action = NEW
 #
         self.top = tk.Toplevel(self.parent)
-        tk.Label(self.top, text="FileName").pack(padx=20, pady=10)
+        tk.Label(self.top, text="BookName").pack(padx=20, pady=10)
 
         self.e = tk.Entry(self.top)
         self.e.pack(padx=25)
@@ -61,24 +62,32 @@ class StartWindow(object):
         """
 #
         self.action = IMPORT
+
+        self.import_path = tkFileDialog.askopenfilename(
+                                    defaultextension=".tsv",
+                                    filetypes=[("tab separate value","*.tsv")],
+                                    initialdir = os.path.expanduser("~"),
+                                    parent=self.parent
+                                    ) 
+        if self.import_path:
+            self.top = tk.Toplevel(self.parent)
+            tk.Label(self.top, text="BookName").pack(padx=20, pady=10)
+            self.e = tk.Entry(self.top)
+            self.e.pack(padx=5)
+            b = tk.Button(self.top, text="okay", command=self.okay)
+            b.pack(pady=5)
 #
-        print"Need to access file path call our import function"
-        self.top = tk.Toplevel(self.parent)
-        tk.Label(self.top, text="File Path").pack(padx=20, pady=10)
-        self.e = tk.Entry(self.top)
-        self.e.pack(padx=5)
-        tk.Label(self.top, text="FileName").pack(padx=20, pady=10)
-        self.e2 = tk.Entry(self.top)
-        self.e2.pack(padx=5)
-        b = tk.Button(self.top, text="okay", command=self.okay)
-        b.pack(pady=5)
+        #print"Need to access file path call our import function"
+        #tk.Label(self.top, text="FileName").pack(padx=20, pady=10)
+        #self.e2 = tk.Entry(self.top)
+        #self.e2.pack(padx=5)
 
     def openfile(self):
         """
         this gets the metadata file name and propertys
         """
 #
-        self.action = IMPORT
+        self.action = OPEN
 #
         if self.name == "":
             print " need to access file from metadata" + self.name
@@ -127,7 +136,11 @@ class StartWindow(object):
         main_tk_root[1].update()
         self.parent = root2
 
-        MainWindow(main_tk_root[1],self.name,self.metadata,self.action)
+        if self.action == IMPORT:
+            MainWindow(main_tk_root[1],self.name,self.metadata,self.action,self.import_path)
+        else:
+            MainWindow(main_tk_root[1],self.name,self.metadata,self.action)
+
 
     def _choose(self, event=None):
         """
@@ -154,12 +167,12 @@ class StartWindow(object):
         destorys the window
         opens the file
         """
-#seems okay has to do with new name
+#seems okay has to do with new name(new or import)
         self.name = self.e.get()
         if not self.name in self.metadata:
             self.metadata.append(self.name)
         else:
-#what to do
+#e what to do
             pass
 
         self.top.destroy()

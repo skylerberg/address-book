@@ -235,7 +235,4 @@ class Book:
     def get_entry_index(self,entry):
         '''
         '''
-        print 'to find',entry
-        print 'list0',self.entries[0]
-        print 'list1',self.entries[1]
         return self.entries.index(entry)
