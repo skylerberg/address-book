@@ -281,7 +281,7 @@ class MainWindow(object):
         for i in range(len(self.listFields)):
             tk.Label(self.top, text=self.listFields[i]).pack(padx=20, pady=10)
             self.elist.append(tk.Entry(self.top))
-            self.elist[i].insert(0, )
+            self.elist[i].insert(0, self.address[int(first_index)][i])
             self.elist[i].pack(padx=5)
         print self.elist
         self.index = int(first_index)
