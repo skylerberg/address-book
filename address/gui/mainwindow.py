@@ -366,7 +366,7 @@ class MainWindow(object):
         
         first_index = self.list_box.curselection()[0]
         print 'index',first_index
-        print self.address[first_index]
+        #print self.address[first_index]
         self.value = self.address[int(first_index)]
         self.top = tk.Toplevel(self.parent)
         self.elist= []
