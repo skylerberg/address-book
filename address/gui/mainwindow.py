@@ -340,7 +340,8 @@ class MainWindow(object):
         self.top.destroy()
         self.list_box.insert(tk.END, self.address[-1])
         #self.show()
-        self.address.sort()
+        #self.address.sort()
+        self.update_list()
         self.top.destroy()
         main_tk_root[1].update()
 
@@ -351,12 +352,13 @@ class MainWindow(object):
         entry_to_delete = self.to_entry(value)
         self.book.delete_entry(self.book.get_entry_index(entry_to_delete))
         self.address = self.book.get_str_entries()
+        self.update_list()
 #
         print value
         #self.address.pop(int(first_index))
         #self.deleteShow()
         #self.show()
-        self.list_box.delete(int(first_index))
+        #self.list_box.delete(int(first_index))
         main_tk_root[1].update()
         print self.address
 

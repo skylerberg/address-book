@@ -57,7 +57,11 @@ class Book:
           address book
         :type entry: Entry
         '''
-        self.entries.append(entry)
+        if entry not in self.entries:
+            self.entries.append(entry)
+        else:
+#e should raise exception:
+            pass
 
     def show_entry(self):
         '''
@@ -237,6 +241,7 @@ class Book:
         ret = []
         for entry in self.entries:
             ret.append(str(entry))
+            #ret.append(entry.gui_str())
         return ret
 
     def get_entry_index(self,entry):

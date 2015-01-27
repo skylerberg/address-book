@@ -21,3 +21,14 @@ OPEN = 3
 
 #for output on the gui
 #DELIM="\t"
+
+#for displaying list
+DFNAME = "firstname"
+DLNAME = "lastname"
+DADDR  = "address"
+DCITY  = "city"
+DSTATE = "state"
+DZIP_CODE = "zip"
+DPHONE_NUM = "phone#"
+DEMAIL = "email"
+Dlist = [DFNAME,DLNAME,DADDR,DCITY,DSTATE,DZIP_CODE,DPHONE_NUM,DEMAIL]

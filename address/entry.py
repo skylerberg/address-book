@@ -7,14 +7,14 @@ class Entry:
     '''
 
     def __init__(self,
-                 fname=None,
-                 lname=None,
-                 addr=None,
-                 city=None,
-                 state=None,
-                 zip_code=None,
-                 phone_num=None,
-                 email=None,
+                 fname='',
+                 lname='',
+                 addr='',
+                 city='',
+                 state='',
+                 zip_code='',
+                 phone_num='',
+                 email='',
                  **kwargs):
         '''
         '''
@@ -92,4 +92,25 @@ class Entry:
         phone = self.__dict__[PHONE_NUM]
         return [name,delivery,last,phone]
 
+    def gui_str(self):
+        '''
+        '''
+        ret = ''
+        if self.__dict__[FNAME]:
+            ret += ("firstname:"+self.__dict__[FNAME]+"\t")
+        if self.__dict__[LNAME]:
+            ret += ("lastname:"+self.__dict__[LNAME]+"\t")
+        if self.__dict__[ADDR]:
+            ret += ("address:" + self.__dict__[ADDR]+"\t")
+        if self.__dict__[CITY]:
+            ret += ("city:" + self.__dict__[CITY]+"\t")
+        if self.__dict__[STATE]:
+            ret += ("state:"+self.__dict__[STATE]+"\t")
+        if self.__dict__[ZIP_CODE]:
+            ret += ("zip:"+self.__dict__[ZIP_CODE]+"\t")
+        if self.__dict__[PHONE_NUM]:
+            ret += ("phone#:"+self.__dict__[PHONE_NUM]+"\t")
+        if self.__dict__[EMAIL]:
+            ret += ("email:" + self.__dict__[EMAIL]+"\t")
+        return ret.rstrip()
     #def __hash__(self): may not be needed 
