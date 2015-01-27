@@ -10,7 +10,7 @@ While we do have clear roles determining who is responsible for quality control
 at each step of the process, we also hope to have a culture in which any member
 of the team feels comfortable stepping in at any point and improving our
 artifacts. Our rule is that any member can contribute to any part of the
-project at any time, however, there is always a member who's duty it is to make
+project at any time; however, there is always a member whose duty it is to make
 sure that part is finished on time.
 
 
