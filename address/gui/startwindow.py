@@ -2,19 +2,23 @@
 Initial window when the application is launched.
 """
 import Tkinter as tk
+import tkFileDialog
 
-from address.constants import main_tk_root
+#from address.constants import main_tk_root
+from address.constants import *
 from address.gui.mainwindow import MainWindow
+from address import book
 
 class StartWindow(object):
     """
     First window that allows users to create, import or open address books.
     """
 
-    def __init__(self, parent):
+    def __init__(self, parent, metadata):
         self.parent = parent
         self.top = self.parent
-        self.metadata = ["a", "aa"]# this is our metadata file
+#
+        self.metadata = metadata#["a", "aa"]# this is our metadata file
 
         self.name = ""
         print self.name
@@ -36,6 +40,9 @@ class StartWindow(object):
         creates a tab to place file name
         calls okay button
         """
+#
+        self.action = NEW
+#
         self.top = tk.Toplevel(self.parent)
         tk.Label(self.top, text="FileName").pack(padx=20, pady=10)
 
@@ -52,6 +59,9 @@ class StartWindow(object):
         need to fix to have self.path, different from
         file name for import
         """
+#
+        self.action = IMPORT
+#
         print"Need to access file path call our import function"
         self.top = tk.Toplevel(self.parent)
         tk.Label(self.top, text="File Path").pack(padx=20, pady=10)
@@ -67,6 +77,9 @@ class StartWindow(object):
         """
         this gets the metadata file name and propertys
         """
+#
+        self.action = IMPORT
+#
         if self.name == "":
             print " need to access file from metadata" + self.name
             self.top = tk.Toplevel(self.parent)
@@ -114,7 +127,7 @@ class StartWindow(object):
         main_tk_root[1].update()
         self.parent = root2
 
-        MainWindow(main_tk_root[1], self.name, self.metadata)
+        MainWindow(main_tk_root[1],self.name,self.metadata,self.action)
 
     def _choose(self, event=None):
         """
@@ -141,6 +154,13 @@ class StartWindow(object):
         destorys the window
         opens the file
         """
+#seems okay has to do with new name
         self.name = self.e.get()
+        if not self.name in self.metadata:
+            self.metadata.append(self.name)
+        else:
+#what to do
+            pass
+
         self.top.destroy()
         self.openl()

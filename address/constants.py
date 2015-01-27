@@ -12,3 +12,12 @@ PHONE_NUM = "phone_num"
 EMAIL = "email"
 
 main_tk_root = [True, None]
+SUFFIX = ".json"
+
+#for actions
+NEW = 1
+IMPORT = 2
+OPEN = 3
+
+#for output on the gui
+#DELIM="\t"

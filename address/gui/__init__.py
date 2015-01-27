@@ -3,9 +3,12 @@ The GUI module contains submodules for each type of window as well as a main
 function to start the application.
 """
 import Tkinter as tk
+import os
 
 from address.constants import main_tk_root
 from address.gui.startwindow import StartWindow
+from address import utility
+
 
 
 def main():
@@ -18,7 +21,14 @@ def main():
     main_tk_root[1] = root
     main_tk_root[1].update()
 
-    start_window = StartWindow(main_tk_root[1])
+    data_dir = os.path.expanduser("~")+"/.address"
+    if not os.path.exists(data_dir):
+        os.makedirs(data_dir)
+    os.chdir(data_dir)
+
+    metadata = utility.get_metadata()
+
+    start_window=StartWindow(main_tk_root[1],metadata)
 
     main_tk_root[1].wait_window(start_window.top)
 

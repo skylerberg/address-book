@@ -3,7 +3,10 @@ Window for viewing and editing an address book.
 """
 import Tkinter as tk
 
-from address.constants import main_tk_root
+from address.constants import *
+from address import utility
+from address import book
+from address import entry
 
 
 class MainWindow(object):
@@ -12,7 +15,17 @@ class MainWindow(object):
     user to perform basic CRUD operations.
     """
 
-    def __init__(self, parent, name, metadata):
+#
+    def __init__(self, parent,name,metadata,action):
+        if action == NEW:
+            self.book = book.Book()
+            #print 'here',name,action
+        elif action == OPEN:
+            self.book = book.Book()
+            self.book.import_from(name)
+        elif action == IMPORT:
+            self.book = book.Book(name+SUFFIX)
+#
         self.parent = parent
         self.top = self.parent
         self.name = name
@@ -20,7 +33,7 @@ class MainWindow(object):
         self.e2 = ""
         self.elist=[]
         print name
-        self.address = ["name1, address1 phone1", "name2, address2, phone2"]
+        self.address=self.book.get_str_entries() #["name1, address1, phone1","name2, address2, phone2"]
         self.metadata = metadata
         self.listFields = ["First Name", "Last Name", "Address", "City" ,"State", "Zipcode", "Phone number", "Email"] 
         #self.top = Toplevel(self.parent)
@@ -201,7 +214,11 @@ class MainWindow(object):
     def saveasl(self):
         print "open"
 
-    def save(self):
+    def savel(self):
+#
+        self.book.save_as(self.name+SUFFIX)
+        utility.store_metadata(self.metadata)
+#
         print "open"
 
     def importl(self):
@@ -249,10 +266,14 @@ class MainWindow(object):
         b.pack(pady=5)
 
     def getaddEntry(self):
-        var = ""
+        var = []
         for i in range(len(self.listFields)):
-                var += "\n"+self.elist[i].get()
-        self.address.append(var)
+            var.append(self.elist[i].get())
+        #self.address.append(var)
+#
+        self.book.add_entry(entry.Entry(*var))
+        self.address = self.book.get_str_entries()
+#
         self.top.destroy()
         self.list_box.insert(tk.END, self.address[-1])
         #self.show()
@@ -277,19 +298,35 @@ class MainWindow(object):
         for i in range(len(self.listFields)):
             tk.Label(self.top, text=self.listFields[i]).pack(padx=20, pady=10)
             self.elist.append(tk.Entry(self.top))
-            self.elist[i].insert(0, self.address[int(first_index)][i])
+##
+            self.elist[i].insert(0, self.value.split('\t')[i].split(":")[1])
             self.elist[i].pack(padx=5)
         self.index = int(first_index)
         b = tk.Button(self.top, text="okay", command=self.getEditEntry)
         b.pack(pady=5)
 
     def getEditEntry(self):
-        var = ""
+#
+        var = []
+        attrs_pre = []
         for i in range(len(self.listFields)):
-           var += "\n"+self.elist[i].get()
-        self.address[self.index] = var
+            var.append(self.elist[i].get())
+            attrs_pre.append(self.value.split('\t')[i].split(":")[1])
+
+        
+        #delete then add new
+        entry_pre = entry.Entry(*attrs_pre)
+        entry_new = entry.Entry(*var)
+        self.book.delete_entry(self.book.get_entry_index(entry_pre))
+
+        self.book.add_entry(entry_new)
+        self.address = self.book.get_str_entries()
+#
+        #self.address[self.index] = var
+        self.top.destroy()
         self.list_box.delete(int(self.index))
-        self.list_box.insert(tk.END, self.address[self.index])
+        #self.list_box.insert(tk.END, self.address[self.index])
+        self.list_box.insert(tk.END, str(entry_new))
         self.address.sort()
         main_tk_root[1].update()
         print self.address[self.index]

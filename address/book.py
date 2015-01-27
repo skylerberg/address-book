@@ -223,3 +223,19 @@ class Book:
                     matches.append(entry)
                     break
         return matches
+
+    def get_str_entries(self):
+        '''
+        '''
+        ret = []
+        for entry in self.entries:
+            ret.append(str(entry))
+        return ret
+
+    def get_entry_index(self,entry):
+        '''
+        '''
+        print 'to find',entry
+        print 'list0',self.entries[0]
+        print 'list1',self.entries[1]
+        return self.entries.index(entry)
