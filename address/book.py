@@ -149,21 +149,22 @@ class Book:
         f = open(path)
         reader = csv.reader(f,delimiter="\t")
         for row in reader:
-            assert(len(row) == 5)#assumption of the input format, for now
+            #assert(len(row) == 5)#assumption of the input format, without email
+            assert(len(row) == 6)#assumption of the input format, with email
             city,state,zip_code = row[0].split("  ")#use 2 spaces(in case city name is two-word, or city/state is missing)
             addr = row[1] +" " + row[2]
             fname = row[3].split("  ")[0]
             lname = row[3].split("  ")[1]
             phone_num = row[4]
-            #email = row[5]
+            email = row[5]
             self.entries.append(Entry(fname,
                                       lname,
                                       addr,
                                       city,
                                       state,
                                       zip_code,
-                                      phone_num
-                                      #email
+                                      phone_num,
+                                      email
                                       ))
         f.close()
 
@@ -190,9 +191,9 @@ class Book:
             lname = entry.get_attr(LNAME) or ''
             recipient = fname + "  " + lname#use 2 spaces
             phone = entry.get_attr(PHONE_NUM)
-            #email = entry.get_attr(EMAIL) or ''
-            writer.writerow([last,delivery,second,recipient,phone])
-            #writer.writerow([last,delivery,second,recipient,phone,email])
+            email = entry.get_attr(EMAIL) or ''
+            #writer.writerow([last,delivery,second,recipient,phone])
+            writer.writerow([last,delivery,second,recipient,phone,email])
         f.close()
 
     def merge(self,other):
@@ -206,7 +207,7 @@ class Book:
             if not entry in self.entries:
                 self.add_entry(entry)
 
-    def search(self,string):
+    def search(self,string,field=None):
         '''
         Search all the entries containing a specific string in the address book 
 
@@ -217,12 +218,18 @@ class Book:
         :rtype: List
         '''
         matches = []
-        for entry in self.entries:
-            for key in entry.__dict__:
-                if (entry.__dict__[key] is not None) and (string.lower() in entry.__dict__[key].lower()):
+        if not field:
+            for entry in self.entries:
+                for key in entry.__dict__:
+                    if (entry.__dict__[key] is not None) and (string.lower() in entry.__dict__[key].lower()):
+                        matches.append(entry)
+                        break
+            return matches
+        else:
+            for entry in self.entries:
+                if (field in entry.__dict__) and (string.lower() in entry.__dict__[field].lower()):
                     matches.append(entry)
-                    break
-        return matches
+            return matches
 
     def get_str_entries(self):
         '''
@@ -236,3 +243,8 @@ class Book:
         '''
         '''
         return self.entries.index(entry)
+
+    def set_entries(self,entries):
+        '''
+        '''
+        self.entries = entries

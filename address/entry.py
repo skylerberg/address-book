@@ -84,6 +84,8 @@ class Entry:
         return self.__dict__ == other.__dict__
 
     def to_postal(self):
+        '''
+        '''
         name = self.__dict__[FNAME] + " " + self.__dict__[LNAME]
         delivery = self.__dict__[ADDR]
         last = self.__dict__[CITY] + " " + self.__dict__[STATE] + " " + self.__dict__[ZIP_CODE]

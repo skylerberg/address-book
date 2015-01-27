@@ -210,28 +210,6 @@ class MainWindow(object):
         self.openf()
 
     def mergel(self):
-        #tk.Tk()
-        #tk.Label(self.top, text="File1").pack(padx=20, pady=10)
-        #check_vars = [(tk.IntVar(self.top)) for i in range(len(self.metadata))]
-        #print check_vars
-        self.merge_books = {}
-        print 'merge metadata',self.metadata
-        top = tk.Tk()
-        self.top = top
-        for i,name in enumerate(self.metadata):
-            self.merge_books[name] = tk.IntVar()
-            cb = tk.Checkbutton(top, text = name, variable = self.merge_books[name], \
-                                     onvalue = 1, offvalue = 0, height=5, \
-                                     width = 20)
-            cb.pack()
-        
-
-        b = tk.Button(top, text="okay", command=self.okayMerge)
-        b.pack(pady=5)
-        #var1 = tk.IntVar()
-        #tk.Checkbutton(self.top, text="male")
-
-        '''
         self.top = tk.Toplevel(self.parent)
         tk.Label(self.top, text="File1").pack(padx=20, pady=10)
         self.e = tk.Entry(self.top)
@@ -241,57 +219,30 @@ class MainWindow(object):
         self.e2.pack(padx=5)
         b = tk.Button(self.top, text="okay", command=self.okayMerge)
         b.pack(pady=5)
-        '''
 
     def okayMerge(self):
         # open file one and file 2
         # then merger
-
-        for name in self.merge_books:
-            #self.merge_books[name] = self.merge_books[name].get()
-            print name,self.merge_books[name].get()
-        print "merging"
+#e exception
+        name1 = self.e.get()
+        name2 = self.e2.get()
         self.top.destroy()
-
-        top = tk.Tk()
-        self.top = top
-        self.merge_books_dst = tk.StringVar()
-        self.merge_books_name = []
-        for i,name in enumerate(self.metadata):
-            if self.merge_books[name].get():
-                self.merge_books_name.append(name)
-                rb = tk.Radiobutton(top, text = name, variable = self.merge_books_dst, \
-                                         value = name,\
-                                         indicatoron=0,\
-                                         height=5, \
-                                         width = 20)
-                rb.pack()
-        
-
-        b = tk.Button(top, text="okay", command=self.okayMerge2)
-        b.pack(pady=5)
-
-    def okayMerge2(self):
-        '''
-        '''
-        self.top.destroy()
-        name_dst = self.merge_books_dst.get()
-        book_dst = book.Book(name_dst+SUFFIX)
-        #print book_dst.show_entry()
-        for name in self.merge_books_name:
-            if name != name_dst:
-                b = book.Book(name+SUFFIX)
-                book_dst.merge(b)
-                self.metadata.remove(name)
-#e delete file also
-        #print book_dst.show_entry()
-        book_dst.save_as(name_dst+SUFFIX)
+        print name1, name2
+        b1 = book.Book(name1+SUFFIX)
+        b2 = book.Book(name2+SUFFIX)
+        b1.merge(b2)
+        b1.save_as(name1+SUFFIX)
+        self.metadata.remove(name2)
         utility.store_metadata(self.metadata)
-        if name == self.name:
-            self.address = book_dst.get_str_entries()
-#how to update:
-            #self.show()
-
+        if self.name == name1:
+            self.book =b1
+            self.address = b1.get_str_entries()
+            self.update_list()
+        elif self.name == name2:
+#e what to do? close window?
+                pass
+#
+        print 'merging'
 
     def saveasl(self):
         new_name = tkSimpleDialog.askstring("New name for the book", "new name", parent = self.parent)
@@ -397,10 +348,7 @@ class MainWindow(object):
         first_index = self.list_box.curselection()[0]
         value = self.address[int(first_index)]
 #
-        attrs = []
-        for i in range(len(self.listFields)):
-            attrs.append(value.split('\t')[i].split(":")[1])
-        entry_to_delete = entry.Entry(*attrs)
+        entry_to_delete = self.to_entry(value)
         self.book.delete_entry(self.book.get_entry_index(entry_to_delete))
         self.address = self.book.get_str_entries()
 #
@@ -415,6 +363,8 @@ class MainWindow(object):
     def editE(self):
         
         first_index = self.list_box.curselection()[0]
+        print 'index',first_index
+        print self.address[first_index]
         self.value = self.address[int(first_index)]
         self.top = tk.Toplevel(self.parent)
         self.elist= []
@@ -424,7 +374,7 @@ class MainWindow(object):
 ##
             self.elist[i].insert(0, self.value.split('\t')[i].split(":")[1])
             self.elist[i].pack(padx=5)
-        print self.elist
+        #print self.elist
         self.index = int(first_index)
         b = tk.Button(self.top, text="okay", command=self.getEditEntry)
         b.pack(pady=5)
@@ -432,14 +382,11 @@ class MainWindow(object):
     def getEditEntry(self):
 #
         var = []
-        attrs_pre = []
         for i in range(len(self.listFields)):
             var.append(self.elist[i].get())
-            attrs_pre.append(self.value.split('\t')[i].split(":")[1])
 
-        
         #delete then add new
-        entry_pre = entry.Entry(*attrs_pre)
+        entry_pre = self.to_entry(self.value)
         entry_new = entry.Entry(*var)
         self.book.delete_entry(self.book.get_entry_index(entry_pre))
 
@@ -447,11 +394,12 @@ class MainWindow(object):
         self.address = self.book.get_str_entries()
 #
         #self.address[self.index] = var
-        self.top.destroy()
+        #self.top.destroy()
         self.list_box.delete(int(self.index))
         #self.list_box.insert(tk.END, self.address[self.index])
         self.list_box.insert(tk.END, str(entry_new))
         self.address.sort()
+        self.update_list()
         self.top.destroy()
         main_tk_root[1].update()
         print self.address[self.index]
@@ -473,6 +421,11 @@ class MainWindow(object):
         item_search = self.e2.get()
         self.top.destroy()
         print field + " " +item_search
+        matches = self.book.search(item_search,field)
+        sub_book = book.Book()
+        sub_book.set_entries(matches)
+        self.address = sub_book.get_str_entries()
+        self.update_list()
 #e  how to updating existing values
         # do the search of book here
         # as we have item
@@ -521,6 +474,22 @@ class MainWindow(object):
 #e
         self.book.sort(field)
         self.address = self.book.get_str_entries()
+        self.update_list()
 #
         self.top.destroy()
         main_tk_root[1].update()
+
+    def to_entry(self,value):
+        '''
+        '''
+        attrs = []
+        for i in range(len(self.listFields)):
+            attrs.append(value.split('\t')[i].split(":")[1])
+        return entry.Entry(*attrs)
+
+    def update_list(self):
+        '''
+        '''
+        self.list_box.delete(0,tk.END)
+        for item in self.address:
+            self.list_box.insert(tk.END, item)
