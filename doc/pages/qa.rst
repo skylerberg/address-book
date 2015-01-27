@@ -51,5 +51,5 @@ After the initial completion of the document, the secondary assignee will have o
 
 Once a review is complete, the artifact should be in a completed state. Due to
 this constraint, we recommend our reviewers to begin their review early since
-it is ultimately their responsiblity to make sure that any flaws in the
-artifact are corrected within the alloted time.
+it is ultimately their responsibility to make sure that any flaws in the
+artifact are corrected within the allotted time.
