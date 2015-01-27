@@ -336,7 +336,7 @@ class MainWindow(object):
         b = tk.Button(self.top, text="sort", command=self.sortl)
         b.pack(pady=5)
         print "sortby"
-       )
+    
 
     def sortl(self):
         field = self.e.get()
