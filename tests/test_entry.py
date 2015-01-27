@@ -22,7 +22,7 @@ class TestEntry(unittest.TestCase):
 
     def test_get_unset_mandatory_field(self):
         entry = address.entry.Entry()
-        self.assertEquals(entry.get_attr(address.entry.FNAME), None)
+        self.assertEquals(entry.get_attr(address.entry.FNAME), '')
 
     def test_change_field_value(self):
         entry = address.entry.Entry("William")
