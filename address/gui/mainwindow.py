@@ -257,6 +257,7 @@ class MainWindow(object):
     def addE(self):
         print "add"
         self.top = tk.Toplevel(self.parent)
+        self.elist= []
         for i in range(len(self.listFields)):
             tk.Label(self.top, text=self.listFields[i]).pack(padx=20, pady=10)
             self.elist.append(tk.Entry(self.top))
@@ -278,6 +279,7 @@ class MainWindow(object):
         self.list_box.insert(tk.END, self.address[-1])
         #self.show()
         self.address.sort()
+        self.top.destroy()
         main_tk_root[1].update()
 
     def deleteE(self):
@@ -292,15 +294,18 @@ class MainWindow(object):
         print self.address
 
     def editE(self):
+        
         first_index = self.list_box.curselection()[0]
         self.value = self.address[int(first_index)]
         self.top = tk.Toplevel(self.parent)
+        self.elist= []
         for i in range(len(self.listFields)):
             tk.Label(self.top, text=self.listFields[i]).pack(padx=20, pady=10)
             self.elist.append(tk.Entry(self.top))
 ##
             self.elist[i].insert(0, self.value.split('\t')[i].split(":")[1])
             self.elist[i].pack(padx=5)
+        print self.elist
         self.index = int(first_index)
         b = tk.Button(self.top, text="okay", command=self.getEditEntry)
         b.pack(pady=5)
@@ -328,6 +333,7 @@ class MainWindow(object):
         #self.list_box.insert(tk.END, self.address[self.index])
         self.list_box.insert(tk.END, str(entry_new))
         self.address.sort()
+        self.top.destroy()
         main_tk_root[1].update()
         print self.address[self.index]
 
