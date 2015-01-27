@@ -17,15 +17,19 @@ class MainWindow(object):
         self.top = self.parent
         self.name = name
         self.value = ""
-        self.e2 = "" 
+        self.e2 = ""
+        self.elist=[]
         print name
-        self.address = ["name1, address1, phone1", "name2, address2, phone2"]
+        self.address = ["name1, address1 phone1", "name2, address2, phone2"]
         self.metadata = metadata
+        self.listFields = ["First Name", "Last Name", "Address", "City" ,"State", "Zipcode", "Phone number", "Email"] 
         #self.top = Toplevel(self.parent)
         self._menu = tk.Menu(self.parent, name='menu')
         self.build_submenus()
         self.top.config(menu=self._menu)
-        #self.top.grab_set() self.show() def show(self):
+        #self.top.grab_set()
+        self.show()
+    def show(self):
         tk.Label(self.top,
                  text="Addresses Book "+self.name,
                  font=("Helvetica", 16)
@@ -52,7 +56,7 @@ class MainWindow(object):
         fmenu = tk.Menu(self._menu, name='muenu')
         self._menu.add_cascade(label='File', menu=fmenu, underline=0)
         labels = ('Open...', 'New...', 'Save...', 'Save As...', 'Import...',
-           'Export...', "Merge...")
+           'Export...', "Merge...") 
         fmenu.add_command(label=labels[0], command=lambda m=labels[0]: self.openl())
         fmenu.add_command(label=labels[1], command=lambda m=labels[1]: self.newl())
         fmenu.add_command(label=labels[2], command=lambda m=labels[2]: self.savel())
@@ -64,19 +68,29 @@ class MainWindow(object):
     def add_tool_menu(self):
         fmenu = tk.Menu(self._menu, name='fmenu')
         self._menu.add_cascade(label='Tools', menu=fmenu, underline=0)
-        labels = ('Add entry',
-                  'Delete entry',
-                  'Edit entry',
-                  'Search field',
-                  'Print postal...',
-                  "Sort by...")
+        labels = ('Add entry','Delete entry','Edit entry','Search field','Print postal...','Sort by...','New Field...')
         fmenu.add_command(label=labels[0], command=lambda m=labels[0]: self.addE())
         fmenu.add_command(label=labels[1], command=lambda m=labels[1]: self.deleteE())
         fmenu.add_command(label=labels[2], command=lambda m=labels[2]: self.editE())
         fmenu.add_command(label=labels[3], command=lambda m=labels[3]: self.searchE())
         fmenu.add_command(label=labels[4], command=lambda m=labels[4]: self.printPostalE())
         fmenu.add_command(label=labels[5], command=lambda m=labels[5]: self.sortbyE())
+        fmenu.add_command(label=labels[6], command=lambda m=labels[6]: self.newFieldE())
+    def newFieldE(self):
+        self.top = tk.Toplevel(self.parent)
+        tk.Label(self.top, text="New Field").pack(padx=20, pady=10)
 
+        self.e = tk.Entry(self.top)
+        self.e.pack(padx=25)
+
+        b = tk.Button(self.top, text="okay", command=self.fieldCheck)
+        b.pack(pady=5)
+    def fieldCheck(self):
+        newfield = self.e.get()
+    
+        self.top.destroy()
+        self.listFields.append(newfield)
+        print self.listFields
     def openl(self):
         """
         self.top = Toplevel(self.parent)
@@ -125,6 +139,7 @@ class MainWindow(object):
         try:
             first_index = self.list_box.curselection()[0]
             value = self.metadata[int(first_index)]
+            
             self.top.destroy()
             self.name = value
             event
@@ -225,55 +240,22 @@ class MainWindow(object):
     def addE(self):
         print "add"
         self.top = tk.Toplevel(self.parent)
-
-        tk.Label(self.top, text="First Name").pack(padx=20, pady=10)
-        self.e = tk.Entry(self.top)
-        self.e.insert(0, "firstname")
-        self.e.pack(padx=5)
-        tk.Label(self.top, text="Last Name").pack(padx=20, pady=10)
-        self.e2 = tk.Entry(self.top)
-        self.e2.insert(0, "Last")
-        self.e2.pack(padx=5)
-        tk.Label(self.top, text="Address").pack(padx=20, pady=10)
-        self.e3 = tk.Entry(self.top)
-        self.e3.insert(0, "Address")
-        self.e3.pack(padx=5)
-        tk.Label(self.top, text=" City").pack(padx=20, pady=10)
-        self.e4 = tk.Entry(self.top)
-        self.e4.insert(0, "City")
-        self.e4.pack(padx=5)
-        tk.Label(self.top, text="State").pack(padx=20, pady=10)
-        self.e5 = tk.Entry(self.top)
-        self.e5.insert(0, "State")
-        self.e5.pack(padx=5)
-        tk.Label(self.top, text="Zipcode").pack(padx=20, pady=10)
-        self.e6 = tk.Entry(self.top)
-        self.e6.insert(0, "Zipcode")
-        self.e6.pack(padx=5)
-        tk.Label(self.top, text="PhoneNumber").pack(padx=20, pady=10)
-        self.e7 = tk.Entry(self.top)
-        self.e7.insert(0, "PhoneNumber")
-        self.e7.pack(padx=5)
-        tk.Label(self.top, text="Email").pack(padx=20, pady=10)
-        self.e8 = tk.Entry(self.top)
-        self.e8.insert(0, "Email")
-        self.e8.pack(padx=5)
-
+        for i in range(len(self.listFields)):
+            tk.Label(self.top, text=self.listFields[i]).pack(padx=20, pady=10)
+            self.elist.append(tk.Entry(self.top))
+            self.elist[i].insert(0, self.listFields[i])
+            self.elist[i].pack(padx=5)
         b = tk.Button(self.top, text="okay", command=self.getaddEntry)
         b.pack(pady=5)
 
     def getaddEntry(self):
-        first = self.e.get()
-        last = self.e2.get()
-        address = self.e3.get()
-        city = self.e4.get()
-        state = self.e5.get()
-        zipcode = self.e6.get()
-        Phonenumber = self.e7.get()
-        email = self.e8.get()
-        self.address.append(first + last+address+city)
+        var = ""
+        for i in range(len(self.listFields)):
+                var += "\n"+self.elist[i].get()
+        self.address.append(var)
         self.top.destroy()
         self.list_box.insert(tk.END, self.address[-1])
+        #self.show()
         self.address.sort()
         main_tk_root[1].update()
 
@@ -292,55 +274,20 @@ class MainWindow(object):
         first_index = self.list_box.curselection()[0]
         self.value = self.address[int(first_index)]
         self.top = tk.Toplevel(self.parent)
-
-        tk.Label(self.top, text=" First Name ").pack(padx=20, pady=10)
-        self.e = tk.Entry(self.top)
-        self.e.insert(0, "firstname")
-        self.e.pack(padx=5)
-        tk.Label(self.top, text="Last Name").pack(padx=20, pady=10)
-        self.e2 = tk.Entry(self.top)
-        self.e2.insert(0, "Last")
-        self.e2.pack(padx=5)
-        tk.Label(self.top, text="Address").pack(padx=20, pady=10)
-        self.e3 = tk.Entry(self.top)
-        self.e3.insert(0, "Address")
-        self.e3.pack(padx=5)
-        tk.Label(self.top, text=" City").pack(padx=20, pady=10)
-        self.e4 = tk.Entry(self.top)
-        self.e4.insert(0, "City")
-        self.e4.pack(padx=5)
-        tk.Label(self.top, text="State").pack(padx=20, pady=10)
-        self.e5 = tk.Entry(self.top)
-        self.e5.insert(0, "State")
-        self.e5.pack(padx=5)
-        tk.Label(self.top, text="Zipcode").pack(padx=20, pady=10)
-        self.e6 = tk.Entry(self.top)
-        self.e6.insert(0, "Zipcode")
-        self.e6.pack(padx=5)
-        tk.Label(self.top, text="PhoneNumber").pack(padx=20, pady=10)
-        self.e7 = tk.Entry(self.top)
-        self.e7.insert(0, "PhoneNumber")
-        self.e7.pack(padx=5)
-        tk.Label(self.top, text="Email").pack(padx=20, pady=10)
-        self.e8 = tk.Entry(self.top)
-        self.e8.insert(0, "Email")
-        self.e8.pack(padx=5)
+        for i in range(len(self.listFields)):
+            tk.Label(self.top, text=self.listFields[i]).pack(padx=20, pady=10)
+            self.elist.append(tk.Entry(self.top))
+            self.elist[i].insert(0, self.address[int(first_index)][i])
+            self.elist[i].pack(padx=5)
         self.index = int(first_index)
-        print "edit"
         b = tk.Button(self.top, text="okay", command=self.getEditEntry)
         b.pack(pady=5)
 
     def getEditEntry(self):
-        first = self.e.get()
-        last = self.e2.get()
-        address = self.e3.get()
-        city = self.e4.get()
-        state = self.e5.get()
-        zipcode = self.e6.get()
-        Phonenumber = self.e7.get()
-        email = self.e8.get()
-        self.address[self.index] = first + last+address+city
-        self.top.destroy()
+        var = ""
+        for i in range(len(self.listFields)):
+           var += "\n"+self.elist[i].get()
+        self.address[self.index] = var
         self.list_box.delete(int(self.index))
         self.list_box.insert(tk.END, self.address[self.index])
         self.address.sort()
@@ -389,7 +336,7 @@ class MainWindow(object):
         b = tk.Button(self.top, text="sort", command=self.sortl)
         b.pack(pady=5)
         print "sortby"
-        print self.e.get()
+       )
 
     def sortl(self):
         field = self.e.get()
