@@ -20,7 +20,7 @@ class MainWindow(object):
     """
 
 #
-    def __init__(self, parent, name, action, import_path=None):#since import_path is likely to be different from name..
+    def __init__(self, name, action, import_path=None):#since import_path is likely to be different from name..
         if action == NEW:
             self.book = book.Book()
             #print 'here',name,action
@@ -30,7 +30,9 @@ class MainWindow(object):
         elif action == OPEN:
             self.book = data.load(name)
 #
-        self.parent = parent
+        self.parent = tk.Tk()
+        self.parent.geometry("1500x1250+300+300")
+        self.parent.title("Address Book")
         self.top = self.parent
         self.name = name
         self.value = ""

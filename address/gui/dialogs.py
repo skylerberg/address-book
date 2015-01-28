@@ -61,10 +61,7 @@ class OpenDialog(tk.Toplevel):
         selected_index = self.list_box.curselection()[0]
         name = self.metadata[int(selected_index)]
         self.destroy()
-        new_root = tk.Tk()
-        new_root.geometry("1500x1250+300+300")
-        new_root.title("Team 2 Address Book")
-        self.result = address.gui.MainWindow(new_root, name, OPEN)
+        self.result = address.gui.MainWindow(name, OPEN)
 
 
 class NewDialog(tk.Toplevel):
@@ -96,10 +93,7 @@ class NewDialog(tk.Toplevel):
         """
         name = self.e.get()
         self.destroy()
-        new_root = tk.Tk()
-        new_root.geometry("1500x1250+300+300")
-        new_root.title("Team 2 Address Book")
-        self.result = address.gui.MainWindow(new_root, name, NEW)
+        self.result = address.gui.MainWindow(name, NEW)
 
 
 class ImportDialog(tk.Toplevel):
@@ -133,7 +127,4 @@ class ImportDialog(tk.Toplevel):
         """
         name = self.e.get()
         self.destroy()
-        new_root = tk.Tk()
-        new_root.geometry("1500x1250+300+300")
-        new_root.title("Team 2 Address Book")
-        self.result = address.gui.MainWindow(new_root, name, IMPORT, self.import_path)
+        self.result = address.gui.MainWindow(name, IMPORT, self.import_path)
