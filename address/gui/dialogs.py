@@ -76,6 +76,8 @@ class NewDialog(tk.Toplevel):
         self.parent = parent
         self.result = None
 
+        self.bind("<Return>", self._open)
+
         tk.Label(self, text="BookName").pack(padx=20, pady=10)
 
         self.e = tk.Entry(self)
@@ -85,6 +87,7 @@ class NewDialog(tk.Toplevel):
         okay_button.pack(pady=5)
 
         self.grab_set()
+        self.e.focus_set()
         self.parent.wait_window(self)
 
     def _open(self, *args):
@@ -102,6 +105,7 @@ class ImportDialog(tk.Toplevel):
     """
 
     def __init__(self, parent, title=None):
+        self.result = None
         self.import_path = tkFileDialog.askopenfilename(
                                 defaultextension=".tsv",
                                 filetypes=[("tab separated values", "*.tsv")],
@@ -113,13 +117,17 @@ class ImportDialog(tk.Toplevel):
             if title is not None:
                 self.title = title
             self.parent = parent
-            self.result = None
 
+            self.bind("<Return>", self._open)
             tk.Label(self, text="BookName").pack(padx=20, pady=10)
             self.e = tk.Entry(self)
             self.e.pack(padx=5)
             b = tk.Button(self, text="okay", command=self._open)
             b.pack(pady=5)
+            self.grab_set()
+            self.e.focus_set()
+            self.parent.wait_window(self)
+
 
     def _open(self, *args):
         """
