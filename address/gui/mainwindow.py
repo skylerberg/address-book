@@ -7,7 +7,7 @@ import tkSimpleDialog
 import os
 
 from address.constants import *
-from address.gui.dialogs import OpenDialog
+from address.gui.dialogs import OpenDialog, NewDialog
 import address.data as data
 from address import utility
 from address import book
@@ -152,18 +152,7 @@ class MainWindow(object):
         creates a tab to place file name
         calls okay button
         """
-#
-        self.action = NEW
-#
-        self.top = tk.Toplevel(self.parent)
-        tk.Label(self.top, text="FileName").pack(padx=20, pady=10)
-
-        self.e = tk.Entry(self.top)
-        self.e.pack(padx=25)
-
-        b = tk.Button(self.top, text="okay", command=self.okay)
-        b.pack(pady=5)
-        print "new"
+        NewDialog(self.parent)
 
     def okay(self):
         """

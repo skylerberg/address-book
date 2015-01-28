@@ -8,7 +8,7 @@ import os
 #from address.constants import main_tk_root
 from address.constants import *
 from address.gui.mainwindow import MainWindow
-from address.gui.dialogs import OpenDialog
+from address.gui.dialogs import OpenDialog, NewDialog
 from address import book
 
 class StartWindow(object):
@@ -40,19 +40,9 @@ class StartWindow(object):
         creates a tab to place file name
         calls okay button
         """
-#
-        self.action = NEW
-#
-        self.top = tk.Toplevel(self.parent)
-        tk.Label(self.top, text="BookName").pack(padx=20, pady=10)
-
-        self.e = tk.Entry(self.top)
-        self.e.pack(padx=25)
-
-        okay_button = tk.Button(self.top, text="okay", command=self.okay)
-        okay_button.pack(pady=5)
-        self.top.grab_set()
-        self.parent.wait_window(self.top)
+        dialog = NewDialog(self.parent)
+        if dialog.result is not None:
+            self.parent.destroy()
 
     def importl(self):
         """
@@ -87,9 +77,9 @@ class StartWindow(object):
         """
         Creates and OpenDialog and destroys this window.
         """
-        OpenDialog(self.parent)
-        # TODO: Only destroy if it was not cancelled
-        self.parent.destroy()
+        dialog = OpenDialog(self.parent)
+        if dialog.result is not None:
+            self.parent.destroy()
 
     def openl(self):
         """

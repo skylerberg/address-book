@@ -3,8 +3,7 @@ Dialogs that can be accessed by any windows.
 """
 import Tkinter as tk
 
-from address import utility
-from address.constants import OPEN
+from address.constants import OPEN, NEW
 import address.gui
 import address.data as data
 
@@ -16,6 +15,7 @@ class OpenDialog(tk.Toplevel):
 
     def __init__(self, parent, title=None):
         tk.Toplevel.__init__(self, parent)
+        self.result = None
         if title is not None:
             self.title = title
 
@@ -62,4 +62,39 @@ class OpenDialog(tk.Toplevel):
         new_root = tk.Tk()
         new_root.geometry("1500x1250+300+300")
         new_root.title("Team 2 Address Book")
-        address.gui.MainWindow(new_root, name, OPEN)
+        self.result = address.gui.MainWindow(new_root, name, OPEN)
+
+
+class NewDialog(tk.Toplevel):
+    """
+    Dialog for opening an existing address book.
+    """
+
+    def __init__(self, parent, title=None):
+        tk.Toplevel.__init__(self, parent)
+        if title is not None:
+            self.title = title
+        self.parent = parent
+        self.result = None
+
+        tk.Label(self, text="BookName").pack(padx=20, pady=10)
+
+        self.e = tk.Entry(self)
+        self.e.pack(padx=25)
+
+        okay_button = tk.Button(self, text="okay", command=self._open)
+        okay_button.pack(pady=5)
+
+        self.grab_set()
+        self.parent.wait_window(self)
+
+    def _open(self):
+        """
+        Open the address book selected by the user.
+        """
+        name = self.e.get()
+        self.destroy()
+        new_root = tk.Tk()
+        new_root.geometry("1500x1250+300+300")
+        new_root.title("Team 2 Address Book")
+        self.result = address.gui.MainWindow(new_root, name, NEW)
