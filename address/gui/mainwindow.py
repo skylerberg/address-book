@@ -8,6 +8,7 @@ import os
 
 from address.constants import *
 from address.gui.dialogs import OpenDialog
+import address.data as data
 from address import utility
 from address import book
 from address import entry
@@ -20,7 +21,7 @@ class MainWindow(object):
     """
 
 #
-    def __init__(self, parent, name, metadata, action, import_path=None):#since import_path is likely to be different from name..
+    def __init__(self, parent, name, action, import_path=None):#since import_path is likely to be different from name..
         if action == NEW:
             self.book = book.Book()
             #print 'here',name,action
@@ -28,7 +29,7 @@ class MainWindow(object):
             self.book = book.Book()
             self.book.import_from(import_path)
         elif action == OPEN:
-            self.book = book.Book(name+SUFFIX)
+            self.book = data.load(name)
 #
         self.parent = parent
         self.top = self.parent
@@ -38,7 +39,6 @@ class MainWindow(object):
         self.elist=[]
         print name
         self.address=self.book.get_str_entries() #["name1, address1, phone1","name2, address2, phone2"]
-        self.metadata = metadata
         self.listFields = ["First Name", "Last Name", "Address", "City" ,"State", "Zipcode", "Phone number", "Email"] 
         #self.top = Toplevel(self.parent)
         self._menu = tk.Menu(self.parent, name='menu')
@@ -124,9 +124,9 @@ class MainWindow(object):
         #main_tk_root[1].destroy()
         self.top = root3
         if self.action == IMPORT:
-            MainWindow(root3,self.name,self.metadata,self.action,self.import_path)
+            MainWindow(root3,self.name,self.action,self.import_path)
         else:
-            MainWindow(root3,self.name,self.metadata,self.action)
+            MainWindow(root3,self.name,self.action)
 
     def _choose(self, event=None):
         """
@@ -134,11 +134,10 @@ class MainWindow(object):
         """
         try:
             first_index = self.list_box.curselection()[0]
-            value = self.metadata[int(first_index)]
-            
+            value = data.get_book_names[int(first_index)]
+
             self.top.destroy()
             self.name = value
-            event
         except IndexError:
             #print "here"
             self.name = None
@@ -177,11 +176,6 @@ class MainWindow(object):
         #path = ""
 #seems okay has to do with new name(new or import)
         self.name = self.e.get()
-        if not self.name in self.metadata:
-            self.metadata.append(self.name)
-        else:
-#e what to do
-            pass
         self.top.destroy()
         #self.openf(path)
         self.openf()
@@ -205,12 +199,10 @@ class MainWindow(object):
         name2 = self.e2.get()
         self.top.destroy()
         print name1, name2
-        b1 = book.Book(name1+SUFFIX)
-        b2 = book.Book(name2+SUFFIX)
+        b1 = data.load(name1)
+        b2 = data.load(name2)
         b1.merge(b2)
-        b1.save_as(name1+SUFFIX)
-        self.metadata.remove(name2)
-        utility.store_metadata(self.metadata)
+        data.save(name1, b1)
         if self.name == name1:
             self.book =b1
             self.address = b1.get_str_entries()
@@ -223,25 +215,10 @@ class MainWindow(object):
 
     def saveasl(self):
         new_name = tkSimpleDialog.askstring("New name for the book", "new name", parent = self.parent)
-        if new_name:
-            if not new_name in self.metadata:
-                self.book.save_as(new_name+SUFFIX)
-                self.metadata.append(new_name)
-                self.metadata.sort()
-                utility.store_metadata(self.metadata)
-            else:
-#e
-                pass
-
+        data.save(new_name, self.book)
 
     def savel(self):
-#
-        self.book.save_as(self.name+SUFFIX)
-        if not self.name in self.metadata:
-            self.metadata.append(self.name)
-            self.metadata.sort()
-        utility.store_metadata(self.metadata)
-#
+        data.save(self.name, self.book)
         print "open"
 
     def importl(self):

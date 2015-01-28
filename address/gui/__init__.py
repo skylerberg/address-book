@@ -27,9 +27,7 @@ def main():
         os.makedirs(data_dir)
     os.chdir(data_dir)
 
-    metadata = utility.get_metadata()
-
-    start_window=StartWindow(main_tk_root[1],metadata)
+    start_window=StartWindow(main_tk_root[1])
 
     tk.mainloop()
 

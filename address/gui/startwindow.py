@@ -16,11 +16,9 @@ class StartWindow(object):
     First window that allows users to create, import or open address books.
     """
 
-    def __init__(self, parent, metadata):
+    def __init__(self, parent):
         self.parent = parent
         self.top = self.parent
-#
-        self.metadata = metadata#["a", "aa"]# this is our metadata file
 
         self.name = ""
         print self.name
@@ -87,7 +85,7 @@ class StartWindow(object):
 
     def openfile(self):
         """
-        this gets the metadata file name and propertys
+        Creates and OpenDialog and destroys this window.
         """
         OpenDialog(self.parent)
         # TODO: Only destroy if it was not cancelled
@@ -109,9 +107,9 @@ class StartWindow(object):
         self.parent = root2
 
         if self.action == IMPORT:
-            MainWindow(main_tk_root[1],self.name,self.metadata,self.action,self.import_path)
+            MainWindow(main_tk_root[1],self.name,self.action,self.import_path)
         else:
-            MainWindow(main_tk_root[1],self.name,self.metadata,self.action)
+            MainWindow(main_tk_root[1],self.name,self.action)
 
     def okay(self):
         """
@@ -121,11 +119,6 @@ class StartWindow(object):
         """
 #seems okay has to do with new name(new or import)
         self.name = self.e.get()
-        if not self.name in self.metadata:
-            self.metadata.append(self.name)
-        else:
-#e what to do
-            pass
 
         self.top.destroy()
         self.openl()

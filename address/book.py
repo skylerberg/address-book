@@ -70,18 +70,6 @@ class Book:
         for index, entry in enumerate(self.entries):
             print index, entry
 
-    def save_as(self, path):
-        '''
-        Save the book into a file using json format
-
-        :arg path: The path to the file, if the file exists, it will be
-          overwritten
-        :type path: String
-        '''
-        f = open(path, "w")
-        json.dump(self, f, cls=BookEncoder)
-        f.close()
-
     def sort(self, attr):
         '''
         Sort the entries based on one of the attributes

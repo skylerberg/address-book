@@ -6,6 +6,7 @@ import Tkinter as tk
 from address import utility
 from address.constants import OPEN
 import address.gui
+import address.data as data
 
 
 class OpenDialog(tk.Toplevel):
@@ -31,8 +32,7 @@ class OpenDialog(tk.Toplevel):
         scroll_bar.config(command=self.list_box.yview)
         self.list_box.config(yscrollcommand=scroll_bar.set)
 
-        self.metadata = utility.get_metadata()
-        self.metadata.sort()
+        self.metadata = data.get_book_names()
 
         for item in self.metadata:
             self.list_box.insert(tk.END, item)
@@ -62,4 +62,4 @@ class OpenDialog(tk.Toplevel):
         new_root = tk.Tk()
         new_root.geometry("1500x1250+300+300")
         new_root.title("Team 2 Address Book")
-        address.gui.MainWindow(new_root, name, self.metadata, OPEN)
+        address.gui.MainWindow(new_root, name, OPEN)

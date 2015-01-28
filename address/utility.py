@@ -30,22 +30,3 @@ def validate(attr, string):  # return value may need to be improved
         return re.match(r"^\d{5}$|^\d{5}-\d{4}$", string)
     else:
         return True  # if the check is unimplememted, return true for now
-
-def get_metadata():
-    '''
-    '''
-    f = open("metadata","a+")
-    f.seek(0)
-    metadata = []
-    for line in f:
-        metadata.append(line.rstrip())
-    f.close()
-    return metadata
-
-def store_metadata(metadata):
-    '''
-    '''
-    f = open("metadata","w")
-    for meta in metadata:
-        f.write(meta+"\n")
-    f.close()
