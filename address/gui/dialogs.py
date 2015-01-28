@@ -53,7 +53,7 @@ class OpenDialog(tk.Toplevel):
         self.grab_set()
         self.parent.wait_window(self)
 
-    def _open(self):
+    def _open(self, *args):
         """
         Open the address book selected by the user.
         """
@@ -87,7 +87,7 @@ class NewDialog(tk.Toplevel):
         self.grab_set()
         self.parent.wait_window(self)
 
-    def _open(self):
+    def _open(self, *args):
         """
         Open the address book selected by the user.
         """
@@ -121,7 +121,7 @@ class ImportDialog(tk.Toplevel):
             b = tk.Button(self, text="okay", command=self._open)
             b.pack(pady=5)
 
-    def _open(self):
+    def _open(self, *args):
         """
         Open the address book selected by the user.
         """
