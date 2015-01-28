@@ -74,8 +74,7 @@ class MainWindow(object):
     def add_file_menu(self):
         fmenu = tk.Menu(self._menu, name='muenu')
         self._menu.add_cascade(label='File', menu=fmenu, underline=0)
-        labels = ('Open...', 'New...', 'Save...', 'Save As...', 'Import...',
-           'Export...', "Merge...") 
+        labels = ('Open', 'New', 'Save', 'Save As', 'Import', 'Export', "Merge")
         fmenu.add_command(label=labels[0], command=lambda m=labels[0]: self.openl())
         fmenu.add_command(label=labels[1], command=lambda m=labels[1]: self.newl())
         fmenu.add_command(label=labels[2], command=lambda m=labels[2]: self.savel())
