@@ -12,46 +12,38 @@ class StartWindow(object):
 
     def __init__(self, parent):
         self.parent = parent
-        self.top = self.parent
-
-        self.name = ""
-        print self.name
         new_button = tk.Button(parent,
-                               text="new",
+                               text="New",
                                command=self.new, height=5, width=20)
         new_button.pack(pady=30)
         open_button = tk.Button(parent,
-                                text="openfile",
-                                command=self.openfile, height=5, width=20)
+                                text="Open",
+                                command=self.open, height=5, width=20)
         open_button.pack(pady=30)
         import_button = tk.Button(parent,
-                                  text="import",
-                                  command=self.importl, height=5, width=20)
+                                  text="Import",
+                                  command=self.import_, height=5, width=20)
         import_button.pack(pady=30)
 
     def new(self):
         """
-        creates a tab to place file name
-        calls okay button
+        Creates an NewDialog and destroys this window if a new book is created.
         """
         dialog = NewDialog(self.parent)
         if dialog.result is not None:
             self.parent.destroy()
 
-    def importl(self):
+    def import_(self):
         """
-        creates a tab to place file path
-        calls okay button
-        need to fix to have self.path, different from
-        file name for import
+        Creates an ImportDialog and destroys this window if a book is imported.
         """
         dialog = ImportDialog(self.parent)
         if dialog.result is not None:
             self.parent.destroy()
 
-    def openfile(self):
+    def open(self):
         """
-        Creates and OpenDialog and destroys this window.
+        Creates an OpenDialog and destroys this window if a book is opened.
         """
         dialog = OpenDialog(self.parent)
         if dialog.result is not None:
