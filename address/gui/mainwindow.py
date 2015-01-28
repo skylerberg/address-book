@@ -45,6 +45,7 @@ class MainWindow(object):
         self.top.config(menu=self._menu)
         #self.top.grab_set()
         self.show()
+
     def show(self):
         tk.Label(self.top,
                  text="Addresses Book "+self.name,
@@ -92,6 +93,7 @@ class MainWindow(object):
         fmenu.add_command(label=labels[4], command=lambda m=labels[4]: self.printPostalE())
         fmenu.add_command(label=labels[5], command=lambda m=labels[5]: self.sortbyE())
         fmenu.add_command(label=labels[6], command=lambda m=labels[6]: self.newFieldE())
+
     def newFieldE(self):
         self.top = tk.Toplevel(self.parent)
         tk.Label(self.top, text="New Field").pack(padx=20, pady=10)
@@ -101,6 +103,7 @@ class MainWindow(object):
 
         b = tk.Button(self.top, text="okay", command=self.fieldCheck)
         b.pack(pady=5)
+
     def fieldCheck(self):
         newfield = self.e.get()
     
@@ -111,62 +114,12 @@ class MainWindow(object):
     def openl(self):
         OpenDialog(self.parent)
 
-    def openf(self):
-        """
-        gets name and can use it to get data file, need to open file
-        creates a new window deletes the old
-        New window will have file data uploaded on page
-        """
-        root3 = tk.Tk()
-        root3.geometry("1500x1250+300+300")
-        root3.title("Team 2.1 Address Book")
-        #main_tk_root[1].destroy()
-        self.top = root3
-        if self.action == IMPORT:
-            MainWindow(root3,self.name,self.action,self.import_path)
-        else:
-            MainWindow(root3,self.name,self.action)
-
-    def _choose(self, event=None):
-        """
-        Chooses correct file to open
-        """
-        try:
-            first_index = self.list_box.curselection()[0]
-            value = data.get_book_names[int(first_index)]
-
-            self.top.destroy()
-            self.name = value
-        except IndexError:
-            #print "here"
-            self.name = None
-            self.top.destroy()
-
-    def _cancel(self, event=None):
-        """if not right close and they need to reopen"""
-        self.top.destroy()
-
     def newl(self):
         """
         creates a tab to place file name
         calls okay button
         """
         NewDialog(self.parent)
-
-    def okay(self):
-        """
-        grabs name for file
-        destorys the window
-        opens the file
-        """
-        #if self.e2 != "":
-        #    path = self.e2.get()
-        #path = ""
-#seems okay has to do with new name(new or import)
-        self.name = self.e.get()
-        self.top.destroy()
-        #self.openf(path)
-        self.openf()
 
     def mergel(self):
         self.top = tk.Toplevel(self.parent)
@@ -212,7 +165,6 @@ class MainWindow(object):
     def importl(self):
         """
         creates a tab to place file path
-        calls okay button
         need to fix to have self.path, different from
         file name for import
         """
