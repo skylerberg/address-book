@@ -237,7 +237,6 @@ class MainWindow(object):
         #self.deleteShow()
         #self.show()
         #self.list_box.delete(int(first_index))
-        main_tk_root[1].update()
         print self.address
 
     def editE(self):
@@ -281,7 +280,6 @@ class MainWindow(object):
         self.address.sort()
         self.update_list()
         self.top.destroy()
-        main_tk_root[1].update()
         print self.address[self.index]
 
     def searchE(self):
@@ -312,7 +310,6 @@ class MainWindow(object):
         # probably need a display for searched
         #item or place them in first in address book
         # possibly a sort with item in it
-        main_tk_root[1].update()
 
     def printPostalE(self):
         first_index = self.list_box.curselection()[0]
@@ -357,7 +354,6 @@ class MainWindow(object):
         self.update_list()
 #
         self.top.destroy()
-        main_tk_root[1].update()
 
     def to_entry(self,value):
         '''
