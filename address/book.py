@@ -15,7 +15,7 @@ class BookEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 
-class Book:
+class Book(object):
     '''
     Implementation of an address book. 
     '''
@@ -27,26 +27,19 @@ class Book:
         '''
         # self.num_fields  may be needed for supporting customized fileds
         self.entries = []
+        self.fields = [LNAME,
+                       FNAME,
+                       ADDR,
+                       CITY,
+                       STATE,
+                       ZIP_CODE,
+                       PHONE_NUM,
+                       EMAIL]
         if path is not None:
             f = open(path)
             book = json.loads(f.read())
             for entry in book["entries"]:
-                fname = entry[FNAME]
-                lname = entry[LNAME]
-                addr = entry[ADDR]
-                city = entry[CITY]
-                state = entry[STATE]
-                zip_code = entry[ZIP_CODE]
-                phone_num = entry[PHONE_NUM]
-                email = entry[EMAIL]
-                self.entries.append(Entry(fname,
-                                          lname,
-                                          addr,
-                                          city,
-                                          state,
-                                          zip_code,
-                                          phone_num,
-                                          email))
+                self.entries.append(Entry(**entry))
             f.close()
 
     def add_entry(self, entry):
@@ -77,13 +70,8 @@ class Book:
         :arg attr: The attribute to be based on
         :type attr: String
         '''
-
-        if attr == LNAME:
-            self.entries = sorted(self.entries, key=lambda entry: entry.__dict__[LNAME])
-        elif attr == FNAME:
-            self.entries = sorted(self.entries, key=lambda entry: entry.__dict__[FNAME])
-        elif attr == ZIP_CODE:
-            self.entries = sorted(self.entries, key=lambda entry: entry.__dict__[ZIP_CODE])
+        if attr in self.fields:
+            self.entries = sorted(self.entries, key=lambda entry: entry.__dict__[attr])
         else:
             print "Unimplemented!"
 
