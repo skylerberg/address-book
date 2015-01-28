@@ -7,9 +7,8 @@ import tkSimpleDialog
 import os
 
 from address.constants import *
-from address.gui.dialogs import OpenDialog, NewDialog
+from address.gui.dialogs import OpenDialog, NewDialog, ImportDialog
 import address.data as data
-from address import utility
 from address import book
 from address import entry
 
@@ -217,22 +216,7 @@ class MainWindow(object):
         need to fix to have self.path, different from
         file name for import
         """
-#
-        self.action = IMPORT
-        self.import_path = tkFileDialog.askopenfilename(
-                                    defaultextension=".tsv",
-                                    filetypes=[("tab separate value","*.tsv")],
-                                    initialdir = os.path.expanduser("~"),
-                                    parent=self.parent
-                                    ) 
-        if self.import_path:
-            self.top = tk.Toplevel(self.parent)
-            tk.Label(self.top, text="BookName").pack(padx=20, pady=10)
-            self.e = tk.Entry(self.top)
-            self.e.pack(padx=5)
-            b = tk.Button(self.top, text="okay", command=self.okay)
-            b.pack(pady=5)
-#
+        ImportDialog(self.parent)
 
     def exportl(self):
         #self.top = tk.Toplevel(self.parent)
@@ -286,7 +270,6 @@ class MainWindow(object):
         #self.address.sort()
         self.update_list()
         self.top.destroy()
-        main_tk_root[1].update()
 
     def deleteE(self):
         first_index = self.list_box.curselection()[0]

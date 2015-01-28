@@ -1,9 +1,11 @@
 """
 Dialogs that can be accessed by any windows.
 """
+import os
 import Tkinter as tk
+import tkFileDialog
 
-from address.constants import OPEN, NEW
+from address.constants import OPEN, NEW, IMPORT
 import address.gui
 import address.data as data
 
@@ -67,7 +69,7 @@ class OpenDialog(tk.Toplevel):
 
 class NewDialog(tk.Toplevel):
     """
-    Dialog for opening an existing address book.
+    Dialog for creating a new address book.
     """
 
     def __init__(self, parent, title=None):
@@ -98,3 +100,40 @@ class NewDialog(tk.Toplevel):
         new_root.geometry("1500x1250+300+300")
         new_root.title("Team 2 Address Book")
         self.result = address.gui.MainWindow(new_root, name, NEW)
+
+
+class ImportDialog(tk.Toplevel):
+    """
+    Dialog for importing an address book from a file.
+    """
+
+    def __init__(self, parent, title=None):
+        self.import_path = tkFileDialog.askopenfilename(
+                                defaultextension=".tsv",
+                                filetypes=[("tab separated values", "*.tsv")],
+                                initialdir=os.path.expanduser("~"),
+                                parent=parent
+                                )
+        if self.import_path:
+            tk.Toplevel.__init__(self, parent)
+            if title is not None:
+                self.title = title
+            self.parent = parent
+            self.result = None
+
+            tk.Label(self, text="BookName").pack(padx=20, pady=10)
+            self.e = tk.Entry(self)
+            self.e.pack(padx=5)
+            b = tk.Button(self, text="okay", command=self._open)
+            b.pack(pady=5)
+
+    def _open(self):
+        """
+        Open the address book selected by the user.
+        """
+        name = self.e.get()
+        self.destroy()
+        new_root = tk.Tk()
+        new_root.geometry("1500x1250+300+300")
+        new_root.title("Team 2 Address Book")
+        self.result = address.gui.MainWindow(new_root, name, IMPORT, self.import_path)
