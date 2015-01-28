@@ -5,6 +5,7 @@ function to start the application.
 import Tkinter as tk
 
 from address.gui.startwindow import StartWindow
+from address.gui.mainwindow import MainWindow
 
 
 def main():
