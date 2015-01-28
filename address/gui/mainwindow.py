@@ -7,6 +7,7 @@ import tkSimpleDialog
 import os
 
 from address.constants import *
+from address.gui.dialogs import OpenDialog
 from address import utility
 from address import book
 from address import entry
@@ -107,33 +108,9 @@ class MainWindow(object):
         self.top.destroy()
         self.listFields.append(newfield)
         print self.listFields
+
     def openl(self):
-        """
-        self.top = Toplevel(self.parent)
-        # self.top.grab_set()
-        self.top.bind("<Return>", self._choose(self.openf()))
-        Label(self.top, text="open file").pack(padx=5, pady=5)
-        listFrame = Frame(self.top)
-        listFrame.pack(side=TOP, padx=5, pady=5)
-        scrollBar = Scrollbar(listFrame)
-        scrollBar.pack(side=RIGHT, fill=Y)
-        self.listBox = Listbox(listFrame, selectmode=SINGLE)
-        self.listBox.pack(side=LEFT, fill=Y)
-        scrollBar.config(command=self.listBox.yview)
-        self.listBox.config(yscrollcommand=scrollBar.set)
-        self.metadata.sort()
-
-        for item in self.metadata:
-                self.listBox.insert(END, item)
-
-        buttonFrame= Frame(self.top)
-        buttonFrame.pack(side=BOTTOM)
-        chooseButton = Button(buttonFrame, text="Choose", command=self._choose(self.openf()))
-        chooseButton.pack()
-        cancelButton = Button(buttonFrame, text="Cancel", command=self._cancel)
-        cancelButton.pack(side=RIGHT)
-        """
-        pass
+        OpenDialog(self.parent)
 
     def openf(self):
         """

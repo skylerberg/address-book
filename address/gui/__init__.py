@@ -7,6 +7,7 @@ import os
 
 from address.constants import main_tk_root
 from address.gui.startwindow import StartWindow
+from address.gui.mainwindow import MainWindow
 from address import utility
 
 

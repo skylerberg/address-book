@@ -8,6 +8,7 @@ import os
 #from address.constants import main_tk_root
 from address.constants import *
 from address.gui.mainwindow import MainWindow
+from address.gui.dialogs import OpenDialog
 from address import book
 
 class StartWindow(object):
@@ -52,6 +53,8 @@ class StartWindow(object):
 
         okay_button = tk.Button(self.top, text="okay", command=self.okay)
         okay_button.pack(pady=5)
+        self.top.grab_set()
+        self.parent.wait_window(self.top)
 
     def importl(self):
         """
@@ -86,40 +89,9 @@ class StartWindow(object):
         """
         this gets the metadata file name and propertys
         """
-#
-        self.action = OPEN
-#
-        if self.name == "":
-            print " need to access file from metadata" + self.name
-            self.top = tk.Toplevel(self.parent)
-            self.top.grab_set()
-            self.top.bind("<Return>", self._choose)
-            tk.Label(self.top, text="open file").pack(padx=5, pady=5)
-            list_frame = tk.Frame(self.top)
-            list_frame.pack(side=tk.TOP, padx=5, pady=5)
-            scroll_bar = tk.Scrollbar(list_frame)
-            scroll_bar.pack(side=tk.RIGHT, fill=tk.Y)
-            self.list_box = tk.Listbox(list_frame, selectmode=tk.SINGLE)
-            self.list_box.pack(side=tk.LEFT, fill=tk.Y)
-            scroll_bar.config(command=self.list_box.yview)
-            self.list_box.config(yscrollcommand=scroll_bar.set)
-            self.metadata.sort()
-
-            for item in self.metadata:
-                self.list_box.insert(tk.END, item)
-            button_frame = tk.Frame(self.top)
-            button_frame.pack(side=tk.BOTTOM)
-            choose_button = tk.Button(button_frame,
-                                      text="Choose",
-                                      command=self._choose)
-            choose_button.pack()
-            cancel_button = tk.Button(button_frame,
-                                     text="Cancel",
-                                     command=self._cancel)
-            cancel_button.pack(side=tk.RIGHT)
-
-        else:
-            print self.name + "a new file or imported file"
+        OpenDialog(self.parent)
+        # TODO: Only destroy if it was not cancelled
+        self.parent.destroy()
 
     def openl(self):
         """
@@ -140,26 +112,6 @@ class StartWindow(object):
             MainWindow(main_tk_root[1],self.name,self.metadata,self.action,self.import_path)
         else:
             MainWindow(main_tk_root[1],self.name,self.metadata,self.action)
-
-
-    def _choose(self, event=None):
-        """
-        Chooses correct file to open
-        """
-        try:
-            first_index = self.list_box.curselection()[0]
-            value = self.metadata[int(first_index)]
-            self.top.destroy()
-            self.name = value
-            self.openl()
-        except IndexError:
-            #print "here"
-            self.name = None
-            self.top.destroy()
-
-    def _cancel(self, event=None):
-        """ if not right close and they need to reopen"""
-        self.top.destroy()
 
     def okay(self):
         """
