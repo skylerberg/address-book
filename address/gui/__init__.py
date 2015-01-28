@@ -30,9 +30,8 @@ def main():
 
     start_window=StartWindow(main_tk_root[1],metadata)
 
-    main_tk_root[1].wait_window(start_window.top)
+    tk.mainloop()
 
-    main_tk_root[1].wait_window()
 
 if __name__ == "__main__":
     main()
