@@ -220,10 +220,11 @@ class MainWindow(object):
         try:
             first_index = self.list_box.curselection()[0]
             value = self.address[int(first_index)]
-            entry_to_delete = self.to_entry(value)
-            self.book.delete_entry(self.book.get_entry_index(entry_to_delete))
-            self.address = self.book.get_str_entries()
-            self.update_list()
+            if mb.message(mb.ASK,"Do you really want to delete it? There is no going back",parent=self.parent):
+                entry_to_delete = self.to_entry(value)
+                self.book.delete_entry(self.book.get_entry_index(entry_to_delete))
+                self.address = self.book.get_str_entries()
+                self.update_list()
         except IndexError:
             mb.message(mb.WARNING,"Select an entry first!",parent=self.parent)
 

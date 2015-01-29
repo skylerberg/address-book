@@ -17,8 +17,8 @@ IMPORT = 2
 OPEN = 3
 
 #for output on the gui
-#DELIM="\t"
-DELIM="|"
+DELIM="\t"
+#DELIM="|"
 
 #for displaying list
 DFNAME = "firstname"
