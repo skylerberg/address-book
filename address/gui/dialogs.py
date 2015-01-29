@@ -63,7 +63,10 @@ class OpenDialog(tk.Toplevel):
         selected_index = self.list_box.curselection()[0]
         name = self.metadata[int(selected_index)]
         self.destroy()
-        self.result = address.gui.MainWindow(name, OPEN)
+        try:
+            self.result = address.gui.MainWindow(name, OPEN)
+        except IOError:
+            mb.message(mb.ERROR,"File doesn't exist!",parent=self.parent)
 
 
 class NewDialog(tk.Toplevel):
@@ -97,8 +100,11 @@ class NewDialog(tk.Toplevel):
         Open the address book selected by the user.
         """
         name = self.e.get()
-        self.destroy()
-        self.result = address.gui.MainWindow(name, NEW)
+        if name not in data.get_book_names():
+            self.destroy()
+            self.result = address.gui.MainWindow(name, NEW)
+        else:
+            mb.message(mb.WARNING, ("There is already a book named %s, new name pls!") % name, parent=self.parent)
 
 
 class ImportDialog(tk.Toplevel):
@@ -136,6 +142,14 @@ class ImportDialog(tk.Toplevel):
         Open the address book selected by the user.
         """
         name = self.e.get()
+        if name not in data.get_book_names():
+            self.destroy()
+            try:
+                self.result = address.gui.MainWindow(name, IMPORT, self.import_path)
+            except ValueError:
+                mb.message(mb.ERROR,"File is corrupted!",parent=self.parent)
+        else:
+            mb.message(mb.WARNING, ("There is already a book named %s, new name pls!") % name, parent=self.parent)
         self.destroy()
         try:
             self.result = address.gui.MainWindow(name, IMPORT, self.import_path)

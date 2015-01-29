@@ -200,30 +200,33 @@ class MainWindow(object):
             mb.message(mb.WARNING,"Entry already exists!",parent=self.top)
 
     def deleteE(self):
-        first_index = self.list_box.curselection()[0]
-        value = self.address[int(first_index)]
-        entry_to_delete = self.to_entry(value)
-        self.book.delete_entry(self.book.get_entry_index(entry_to_delete))
-        self.address = self.book.get_str_entries()
-        self.update_list()
-        print value
-        print self.address
+        try:
+            first_index = self.list_box.curselection()[0]
+            value = self.address[int(first_index)]
+            entry_to_delete = self.to_entry(value)
+            self.book.delete_entry(self.book.get_entry_index(entry_to_delete))
+            self.address = self.book.get_str_entries()
+            self.update_list()
+        except IndexError:
+            mb.message(mb.WARNING,"Select an entry first!",parent=self.parent)
 
     def editE(self):
-        
-        first_index = self.list_box.curselection()[0]
-        print 'index',first_index
-        self.value = self.address[int(first_index)]
-        self.top = tk.Toplevel(self.parent)
-        self.elist= []
-        for i in range(len(self.book.get_fields())):
-            tk.Label(self.top, text=self.book.get_fields()[i]).pack(padx=20, pady=10)
-            self.elist.append(tk.Entry(self.top))
-            self.elist[i].insert(0, self.book.get_fields()[i])
-            self.elist[i].pack(padx=5)
-        self.index = int(first_index)
-        b = tk.Button(self.top, text="okay", command=self.getEditEntry)
-        b.pack(pady=5)
+        try:
+            first_index = self.list_box.curselection()[0]
+            print 'index',first_index
+            self.value = self.address[int(first_index)]
+            self.top = tk.Toplevel(self.parent)
+            self.elist= []
+            for i in range(len(self.book.get_fields())):
+                tk.Label(self.top, text=self.book.get_fields()[i]).pack(padx=20, pady=10)
+                self.elist.append(tk.Entry(self.top))
+                self.elist[i].insert(0, self.value.split('\t')[i].split(":")[1])
+                self.elist[i].pack(padx=5)
+            self.index = int(first_index)
+            b = tk.Button(self.top, text="okay", command=self.getEditEntry)
+            b.pack(pady=5)
+        except IndexError:
+            mb.message(mb.WARNING,"Select an entry first!",parent=self.parent)
 
     def getEditEntry(self):
         var = []
@@ -270,16 +273,18 @@ class MainWindow(object):
         self.update_list()
 
     def printPostalE(self):
-        first_index = self.list_box.curselection()[0]
-        value = self.address[int(first_index)]
-        entry_to_print = self.to_entry(value)
-        index = self.book.get_entry_index(entry_to_print)
-        postal = self.book.get_entry(index).to_postal()
-        print postal
-        self.top = tk.Toplevel(self.parent)
-        for line in postal:
-            tk.Label(self.top, text=line).pack(padx=20, pady=10)
-        print "print postal"
+        try:
+            first_index = self.list_box.curselection()[0]
+            value = self.address[int(first_index)]
+            entry_to_print = self.to_entry(value)
+            index = self.book.get_entry_index(entry_to_print)
+            postal = self.book.get_entry(index).to_postal()
+            print postal
+            self.top = tk.Toplevel(self.parent)
+            for line in postal:
+                tk.Label(self.top, text=line).pack(padx=20, pady=10)
+        except IndexError:
+            mb.message(mb.WARNING,"Select an entry first!",parent=self.parent)
 
     def sortbyE(self):
         selection_box = dialogs.PickAttribute(self.parent, self.book)
