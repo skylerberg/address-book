@@ -185,11 +185,11 @@ class MainWindow(object):
         b.pack(pady=5)
 
     def getaddEntry(self):
-        var = []
-        for i in range(len(self.listFields)):
-            var.append(self.elist[i].get())
+        var = {}
+        for i in range(len(self.book.get_fields())):
+            var[self.book.get_fields()[i]] = self.elist[i].get()
 
-        entry_to_add = entry.Entry(*var)
+        entry_to_add = entry.Entry(**var)
         if entry_to_add not in self.book.entries:
             self.book.add_entry(entry_to_add)
             self.address = self.book.get_str_entries()

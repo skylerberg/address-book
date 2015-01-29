@@ -43,6 +43,10 @@ class Book(object):
                 self.entries.append(Entry(**entry))
             self.fields = book.get("fields", self.fields)
             f.close()
+        for entry in self.entries:
+            for field in self.fields:
+                if field not in entry.__dict__:
+                    entry.__dict__[field] = ""
 
     def add_entry(self, entry):
         '''
@@ -75,7 +79,7 @@ class Book(object):
         if attr in self.fields:
             self.entries = sorted(self.entries, key=lambda entry: entry.__dict__[attr])
         else:
-            print "Unimplemented!"
+            print "No such field this book."
 
     def delete_entry(self, index):
         '''
@@ -232,13 +236,13 @@ class Book(object):
         '''
         self.entries = entries
 
-    def add_field(self, name):
+    def add_field(self, field):
         '''
         '''
-        if name not in self.fields:
-            self.fields.append(name)
+        if field not in self.fields:
+            self.fields.append(field)
             for entry in self.entries:
-                entry.__dict__[name] = entry.__dict__.get(name, "")
+                entry.__dict__[field] = entry.__dict__.get(field, "")
 
     def get_fields(self):
         return self.fields

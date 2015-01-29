@@ -30,6 +30,7 @@ class Entry:
         attr_d[EMAIL] = email
 
         self.__dict__.update(attr_d)
+        self.__dict__.update(kwargs)
 
     def __str__(self):
         return ("firstname:%s\tlastname:%s\taddr:%s\tcity:%s\tstate:%s\tzip:%s\tphone#:%s\temail:%s") \
