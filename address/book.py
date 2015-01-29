@@ -11,7 +11,8 @@ class BookEncoder(json.JSONEncoder):
     '''
     def default(self, obj):
         if isinstance(obj, Book):
-            return {"entries": [entry.__dict__ for entry in obj.entries]}
+            return {"entries": [entry.__dict__ for entry in obj.entries],
+                    "fields": obj.fields}
         return json.JSONEncoder.default(self, obj)
 
 
@@ -38,8 +39,9 @@ class Book(object):
         if path is not None:
             f = open(path)
             book = json.loads(f.read())
-            for entry in book["entries"]:
+            for entry in book.get("entries", {}):
                 self.entries.append(Entry(**entry))
+            self.fields = book.get("fields", self.fields)
             f.close()
 
     def add_entry(self, entry):
@@ -229,3 +231,14 @@ class Book(object):
         '''
         '''
         self.entries = entries
+
+    def add_field(self, name):
+        '''
+        '''
+        if name not in self.fields:
+            self.fields.append(name)
+            for entry in self.entries:
+                entry.__dict__[name] = entry.__dict__.get(name, "")
+
+    def get_fields(self):
+        return self.fields

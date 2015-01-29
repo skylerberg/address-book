@@ -7,7 +7,7 @@ import tkSimpleDialog
 import os
 
 from address.constants import *
-from address.gui.dialogs import OpenDialog, NewDialog, ImportDialog
+from address.gui.dialogs import OpenDialog, NewDialog, ImportDialog, PickAttribute
 import address.data as data
 from address import book
 from address import entry
@@ -41,7 +41,6 @@ class MainWindow(object):
         self.elist=[]
         print name
         self.address=self.book.get_str_entries() #["name1, address1, phone1","name2, address2, phone2"]
-        self.listFields = ["First Name", "Last Name", "Address", "City" ,"State", "Zipcode", "Phone number", "Email"] 
         #self.top = Toplevel(self.parent)
         self._menu = tk.Menu(self.parent, name='menu')
         self.build_submenus()
@@ -87,7 +86,13 @@ class MainWindow(object):
     def add_tool_menu(self):
         fmenu = tk.Menu(self._menu, name='fmenu')
         self._menu.add_cascade(label='Tools', menu=fmenu, underline=0)
-        labels = ('Add entry', 'Delete entry', 'Edit entry', 'Search field', 'Print postal', 'Sort by', 'New Field')
+        labels = ('Add entry',
+                 'Delete entry',
+                 'Edit entry',
+                 'Search field',
+                 'Print postal',
+                 'Sort by',
+                 'New Field')
         fmenu.add_command(label=labels[0], command=self.addE)
         fmenu.add_command(label=labels[1], command=self.deleteE)
         fmenu.add_command(label=labels[2], command=self.editE)
@@ -107,11 +112,10 @@ class MainWindow(object):
         b.pack(pady=5)
 
     def fieldCheck(self):
-        newfield = self.e.get()
+        new_field = self.e.get()
     
         self.top.destroy()
-        self.listFields.append(newfield)
-        print self.listFields
+        self.book.add_field(new_field)
 
     def openl(self):
         OpenDialog(self.parent)
@@ -162,7 +166,6 @@ class MainWindow(object):
 
     def savel(self):
         data.save(self.name, self.book)
-        print "open"
 
     def importl(self):
         """
@@ -201,10 +204,10 @@ class MainWindow(object):
         print "add"
         self.top = tk.Toplevel(self.parent)
         self.elist= []
-        for i in range(len(self.listFields)):
-            tk.Label(self.top, text=self.listFields[i]).pack(padx=20, pady=10)
+        for i in range(len(self.book.get_fields())):
+            tk.Label(self.top, text=self.book.get_fields()[i]).pack(padx=20, pady=10)
             self.elist.append(tk.Entry(self.top))
-            self.elist[i].insert(0, self.listFields[i])
+            self.elist[i].insert(0, self.book.get_fields()[i])
             self.elist[i].pack(padx=5)
         b = tk.Button(self.top, text="okay", command=self.getaddEntry)
         b.pack(pady=5)
@@ -248,11 +251,11 @@ class MainWindow(object):
         self.value = self.address[int(first_index)]
         self.top = tk.Toplevel(self.parent)
         self.elist= []
-        for i in range(len(self.listFields)):
-            tk.Label(self.top, text=self.listFields[i]).pack(padx=20, pady=10)
+        for i in range(len(self.book.get_fields())):
+            tk.Label(self.top, text=self.book.get_fields()[i]).pack(padx=20, pady=10)
             self.elist.append(tk.Entry(self.top))
 ##
-            self.elist[i].insert(0, self.value.split('\t')[i].split(":")[1])
+            self.elist[i].insert(0, self.book.get_fields()[i])
             self.elist[i].pack(padx=5)
         #print self.elist
         self.index = int(first_index)
@@ -262,7 +265,7 @@ class MainWindow(object):
     def getEditEntry(self):
 #
         var = []
-        for i in range(len(self.listFields)):
+        for i in range(len(self.book.get_fields())):
             var.append(self.elist[i].get())
 
         entry_pre = self.to_entry(self.value)
@@ -333,6 +336,8 @@ class MainWindow(object):
         #tk.Label(self.top, text="Postal line 3").pack(padx=20, pady=10)
 
     def sortbyE(self):
+        selection_box = PickAttribute(self.parent, self.book)
+        """
         self.top = tk.Toplevel(self.parent)
         tk.Label(self.top, text="Field").pack(padx=20, pady=10)
         self.e = tk.Entry(self.top)
@@ -344,20 +349,18 @@ class MainWindow(object):
 
     def sortl(self):
         field = self.e.get()
-        # do you sorting
         print field
-#e
         self.book.sort(field)
         self.address = self.book.get_str_entries()
         self.update_list()
-#
         self.top.destroy()
+        """
 
     def to_entry(self,value):
         '''
         '''
         attrs = []
-        for i in range(len(self.listFields)):
+        for i in range(len(self.book.get_fields())):
             attrs.append(value.split('\t')[i].split(":")[1])
         return entry.Entry(*attrs)
 

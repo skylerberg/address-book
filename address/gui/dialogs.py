@@ -141,3 +141,48 @@ class ImportDialog(tk.Toplevel):
             self.result = address.gui.MainWindow(name, IMPORT, self.import_path)
         except ValueError:
             mb.message(mb.ERROR,"File is corrupted!",parent=self.parent)
+
+
+class PickAttribute(tk.Toplevel):
+
+    def __init__(self, parent, book):
+        tk.Toplevel.__init__(self, parent)
+        self.result = None
+        self.parent = parent
+
+        self.bind("<Return>", self._select)
+        tk.Label(self, text="Select attribute").pack(padx=5, pady=5)
+        list_frame = tk.Frame(self)
+        list_frame.pack(side=tk.TOP, padx=5, pady=5)
+        scroll_bar = tk.Scrollbar(list_frame)
+        scroll_bar.pack(side=tk.RIGHT, fill=tk.Y)
+        self.list_box = tk.Listbox(list_frame, selectmode=tk.SINGLE)
+        self.list_box.pack(side=tk.LEFT, fill=tk.Y)
+        scroll_bar.config(command=self.list_box.yview)
+        self.list_box.config(yscrollcommand=scroll_bar.set)
+
+        for attribute in book.get_fields:
+            self.list_box.insert(tk.END, attribute)
+        self.book = book
+        button_frame = tk.Frame(self)
+        button_frame.pack(side=tk.BOTTOM)
+        select_button = tk.Button(button_frame,
+                                  text="Select",
+                                  command=self._select)
+        select_button.pack()
+        cancel_button = tk.Button(button_frame,
+                                  text="Cancel",
+                                  command=self.destroy)
+        cancel_button.pack()
+
+        self.grab_set()
+        self.parent.wait_window(self)
+
+    def _select(self, *args):
+        """
+        Select an attribute.
+        """
+        #TODO handle no selection
+        selected_index = self.list_box.curselection()[0]
+        self.result = self.book.get_fields()[int(selected_index)]
+        self.destroy()
