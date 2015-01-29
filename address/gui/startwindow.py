@@ -18,7 +18,7 @@ class StartWindow(object):
         new_button.pack(pady=30)
         open_button = tk.Button(parent,
                                 text="Open",
-                                command=self.open, height=5, width=20)
+                                command=self.open_, height=5, width=20)
         open_button.pack(pady=30)
         import_button = tk.Button(parent,
                                   text="Import",
@@ -41,7 +41,7 @@ class StartWindow(object):
         if dialog.result is not None:
             self.parent.destroy()
 
-    def open(self):
+    def open_(self):
         """
         Creates an OpenDialog and destroys this window if a book is opened.
         """
