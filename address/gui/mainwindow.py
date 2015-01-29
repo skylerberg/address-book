@@ -4,6 +4,7 @@ Window for viewing and editing an address book.
 import Tkinter as tk
 import tkFileDialog
 import tkSimpleDialog
+import tkFont
 import os
 
 from address.constants import *
@@ -12,6 +13,7 @@ import address.data as data
 from address import book
 from address import entry
 from address.gui import messagebox as mb
+from address import utility
 
 
 class MainWindow(object):
@@ -58,10 +60,16 @@ class MainWindow(object):
         list_frame.pack(side=tk.TOP, padx=0, pady=0)
         scroll_bar = tk.Scrollbar(list_frame)
         scroll_bar.pack(side=tk.RIGHT, fill=tk.Y)
-        self.list_box = tk.Listbox(list_frame, selectmode=tk.SINGLE, width=150, height=38)
+        scroll_bar2 = tk.Scrollbar(list_frame, orient=tk.HORIZONTAL)
+        scroll_bar2.pack(side=tk.BOTTOM, fill=tk.X)
+        #helv36 = tkFont.Font(family='Helvetica',size=1, weight='bold')
+        #self.list_box = tk.Listbox(list_frame, selectmode=tk.SINGLE, width=150, height=38, font = helv36,bd=7)
+        self.list_box = tk.Listbox(list_frame, selectmode=tk.SINGLE, width=150, height=38, cursor="hand1")
         self.list_box.pack(side=tk.LEFT, fill=tk.Y)
         scroll_bar.config(command=self.list_box.yview)
+        scroll_bar2.config(command=self.list_box.xview)
         self.list_box.config(yscrollcommand=scroll_bar.set)
+        self.list_box.config(yscrollcommand=scroll_bar2.set)
         self.address.sort()
 
         for item in self.address:
@@ -204,7 +212,7 @@ class MainWindow(object):
         for i in range(len(self.listFields)):
             tk.Label(self.top, text=self.listFields[i]).pack(padx=20, pady=10)
             self.elist.append(tk.Entry(self.top))
-            self.elist[i].insert(0, self.listFields[i])
+            #self.elist[i].insert(0, self.listFields[i])
             self.elist[i].pack(padx=5)
         b = tk.Button(self.top, text="okay", command=self.getaddEntry)
         b.pack(pady=5)
@@ -214,15 +222,19 @@ class MainWindow(object):
         for i in range(len(self.listFields)):
             var.append(self.elist[i].get())
 
-        entry_to_add = entry.Entry(*var)
-        if entry_to_add not in self.book.entries:
-            self.book.add_entry(entry_to_add)
-            self.address = self.book.get_str_entries()
-            self.list_box.insert(tk.END, self.address[-1])
-            self.update_list()
-            self.top.destroy()
+        res = utility.has_invalid_field(var)
+        if not res:
+            entry_to_add = entry.Entry(*var)
+            if entry_to_add not in self.book.entries:
+                self.book.add_entry(entry_to_add)
+                self.address = self.book.get_str_entries()
+                self.list_box.insert(tk.END, self.address[-1])
+                self.update_list()
+                self.top.destroy()
+            else:
+                mb.message(mb.WARNING, "Entry already exists!", parent=self.top)
         else:
-            mb.message(mb.WARNING,"Entry already exists!",parent=self.top)
+            mb.message(mb.WARNING, ("%s is invalid!") % res, parent=self.top)
 
     def deleteE(self):
         try:
@@ -270,22 +282,26 @@ class MainWindow(object):
         for i in range(len(self.listFields)):
             var.append(self.elist[i].get())
 
-        entry_pre = self.to_entry(self.value)
-        entry_new = entry.Entry(*var)
-        if entry_new not in self.book.entries:
-            #delete old then add new
-            self.book.delete_entry(self.book.get_entry_index(entry_pre))
-            self.book.add_entry(entry_new)
-            self.address = self.book.get_str_entries()
-            self.list_box.delete(int(self.index))
-            #self.list_box.insert(tk.END, self.address[self.index])
-            self.list_box.insert(tk.END, str(entry_new))
-            self.address.sort()
-            self.update_list()
-            self.top.destroy()
-            print self.address[self.index]
+        res = utility.has_invalid_field(var)
+        if not res:
+            entry_pre = self.to_entry(self.value)
+            entry_new = entry.Entry(*var)
+            if entry_new not in self.book.entries:
+                #delete old then add new
+                self.book.delete_entry(self.book.get_entry_index(entry_pre))
+                self.book.add_entry(entry_new)
+                self.address = self.book.get_str_entries()
+                self.list_box.delete(int(self.index))
+                #self.list_box.insert(tk.END, self.address[self.index])
+                self.list_box.insert(tk.END, str(entry_new))
+                self.address.sort()
+                self.update_list()
+                self.top.destroy()
+                print self.address[self.index]
+            else:
+                mb.message(mb.WARNING,"Entry already exists!",parent=self.top)
         else:
-            mb.message(mb.WARNING,"Entry already exists!",parent=self.top)
+            mb.message(mb.WARNING, ("%s is invalid!") % res, parent=self.top)
 #
 
     def searchE(self):
@@ -376,3 +392,4 @@ class MainWindow(object):
         self.list_box.delete(0,tk.END)
         for item in self.address:
             self.list_box.insert(tk.END, item)
+

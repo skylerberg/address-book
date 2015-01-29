@@ -7,6 +7,35 @@ import re
 from constants import *
 
 
+def has_invalid_field(fields_all):
+    '''
+    Validates the format of four attributes: address, zip code, phone number, and email.
+    Return a string indicating the invalid field; return None is all of them are valid.
+
+    :arg fields_all: A list containing the 8 mandatory fields in a specific order
+    :type fields_all: List
+
+    :returns: A string indicating invalid field.
+    :rtype: String
+    '''
+    addr = fields_all[2].strip()
+    zip_code = fields_all[5].strip()
+    phone_num = fields_all[6].strip()
+    email = fields_all[7].strip()
+
+    if not validate(ADDR,addr):
+        return ADDR
+    if not validate(ZIP_CODE,zip_code):
+        return ZIP_CODE
+    if not validate(PHONE_NUM,phone_num):
+        return PHONE_NUM
+    if not validate(EMAIL,email):
+        return EMAIL
+    return None
+
+
+    return (addr,zip_code,phone_num,email)
+
 def validate(attr, string):  # return value may need to be improved
     '''
     Validate if a string matches the format of a specific attribute.
@@ -21,12 +50,12 @@ def validate(attr, string):  # return value may need to be improved
     :rtype: MatchObject, True, or None
     '''
     if attr == EMAIL:
-        return re.match(r"^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+\.\w+$", string)
+        return re.match(r"^\s*$|^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+\.\w+$", string)
     elif attr == PHONE_NUM:
-        return re.match(r"^\d{10}$|^\d{7}$", string)
+        return re.match(r"^\s*$|^\d{10}$|^\d{7}$|^\d{3}-\d{3}-\d{4}$|^\(\d{3}\)\d{3}-\d{4}$", string)
     elif attr == ADDR:
-        return re.match(r"^\d{1,6}( +\w+){2,3}( +\w{2,4} \d{1,5})?$", string)
+        return re.match(r"^\s*$|^\d{1,6}( +\w+){2,3}( +\w{2,4} \d{1,5})?$", string)
     elif attr == ZIP_CODE:
-        return re.match(r"^\d{5}$|^\d{5}-\d{4}$", string)
+        return re.match(r"^\s*$|^\d{5}$|^\d{5}-\d{4}$", string)
     else:
         return True  # if the check is unimplememted, return true for now
