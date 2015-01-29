@@ -66,7 +66,7 @@ class OpenDialog(tk.Toplevel):
         try:
             self.result = address.gui.MainWindow(name, OPEN)
         except IOError:
-            mb.message(mb.ERROR,"File doesn't exist!",parent=self.parent)
+            mb.message(mb.ERROR,"Cannot open the file!",parent=self.parent)
 
 
 class NewDialog(tk.Toplevel):
@@ -101,10 +101,10 @@ class NewDialog(tk.Toplevel):
         """
         name = self.e.get()
         if name not in data.get_book_names():
-            self.destroy()
             self.result = address.gui.MainWindow(name, NEW)
         else:
             mb.message(mb.WARNING, ("There is already a book named %s, new name pls!") % name, parent=self.parent)
+        self.destroy()
 
 
 class ImportDialog(tk.Toplevel):
