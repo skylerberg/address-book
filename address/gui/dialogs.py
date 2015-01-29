@@ -161,7 +161,7 @@ class PickAttribute(tk.Toplevel):
         scroll_bar.config(command=self.list_box.yview)
         self.list_box.config(yscrollcommand=scroll_bar.set)
 
-        for attribute in book.get_fields:
+        for attribute in book.get_fields():
             self.list_box.insert(tk.END, attribute)
         self.book = book
         button_frame = tk.Frame(self)

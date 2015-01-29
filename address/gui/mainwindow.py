@@ -337,24 +337,10 @@ class MainWindow(object):
 
     def sortbyE(self):
         selection_box = PickAttribute(self.parent, self.book)
-        """
-        self.top = tk.Toplevel(self.parent)
-        tk.Label(self.top, text="Field").pack(padx=20, pady=10)
-        self.e = tk.Entry(self.top)
-        self.e.pack(padx=5)
-        b = tk.Button(self.top, text="sort", command=self.sortl)
-        b.pack(pady=5)
-        print "sortby"
-    
-
-    def sortl(self):
-        field = self.e.get()
-        print field
-        self.book.sort(field)
-        self.address = self.book.get_str_entries()
-        self.update_list()
-        self.top.destroy()
-        """
+        if selection_box.result is not None:
+            self.book.sort(selection_box.result)
+            self.address = self.book.get_str_entries()
+            self.update_list()
 
     def to_entry(self,value):
         '''
