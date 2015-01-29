@@ -40,6 +40,8 @@ class MainWindow(object):
         self.elist=[]
         print name
         self.address=self.book.get_str_entries()
+        self.listFields = ["First Name", "Last Name", "Address", "City" ,"State", "Zip code", "Phone number", "Email"] 
+        #self.top = Toplevel(self.parent)
         self._menu = tk.Menu(self.parent, name='menu')
         self.build_submenus()
         self.top.config(menu=self._menu)
@@ -77,7 +79,7 @@ class MainWindow(object):
     def add_file_menu(self):
         fmenu = tk.Menu(self._menu, name='muenu')
         self._menu.add_cascade(label='File', menu=fmenu, underline=0)
-        labels = ('Open', 'New', 'Save', 'Save As', 'Import', 'Export', "Merge")
+        labels = ('Open', 'New', 'Save', 'Save As', 'Import', 'Export', 'Merge')
         fmenu.add_command(label=labels[0], command=self.openl)
         fmenu.add_command(label=labels[1], command=self.newl)
         fmenu.add_command(label=labels[2], command=self.savel)
@@ -128,10 +130,10 @@ class MainWindow(object):
 
     def mergel(self):
         self.top = tk.Toplevel(self.parent)
-        tk.Label(self.top, text="File1").pack(padx=20, pady=10)
+        tk.Label(self.top, text="Book 1").pack(padx=20, pady=10)
         self.e = tk.Entry(self.top)
         self.e.pack(padx=5)
-        tk.Label(self.top, text="File2").pack(padx=20, pady=10)
+        tk.Label(self.top, text="Book 2").pack(padx=20, pady=10)
         self.e2 = tk.Entry(self.top)
         self.e2.pack(padx=5)
         b = tk.Button(self.top, text="okay", command=self.okayMerge)
@@ -165,6 +167,7 @@ class MainWindow(object):
 
     def savel(self):
         data.save(self.name, self.book)
+        print "Saving  book :" + self.name 
 
     def importl(self):
         dialogs.ImportDialog(self.parent)
