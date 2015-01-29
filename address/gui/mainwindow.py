@@ -142,24 +142,26 @@ class MainWindow(object):
     def okayMerge(self):
         # open file one and file 2
         # then merger
-#e exception
+
+        book_names = data.get_book_names()
         name1 = self.e.get()
         name2 = self.e2.get()
-        self.top.destroy()
-        print name1, name2
-        b1 = data.load(name1)
-        b2 = data.load(name2)
-        b1.merge(b2)
-        data.save(name1, b1)
-        if self.name == name1:
-            self.book =b1
-            self.address = b1.get_str_entries()
-            self.update_list()
-        elif self.name == name2:
-#e what to do? close window?
-                pass
-#
-        print 'merging'
+        if name1 in book_names and name2 in book_names:
+            self.top.destroy()
+            print name1, name2
+            b1 = data.load(name1)
+            b2 = data.load(name2)
+            b1.merge(b2)
+            data.save(name1, b1)
+            if self.name == name1:
+                self.book =b1
+                self.address = b1.get_str_entries()
+                self.update_list()
+            print 'merging'
+        else:
+            mb.message(mb.WARNING,\
+                    "At least one of the books doesn't exist, make sure the book is saved before merging",\
+                    parent=self.top)
 
     def saveasl(self):
         new_name = tkSimpleDialog.askstring("New name for the book", "new name", parent = self.parent)
@@ -235,7 +237,7 @@ class MainWindow(object):
             for i in range(len(self.book.get_fields())):
                 tk.Label(self.top, text=self.book.get_fields()[i]).pack(padx=20, pady=10)
                 self.elist.append(tk.Entry(self.top))
-                self.elist[i].insert(0, self.value.split('\t')[i].split(":")[1])
+                self.elist[i].insert(0, self.value.split(DELIM)[i].split(":")[1])
                 self.elist[i].pack(padx=5)
             self.index = int(first_index)
             b = tk.Button(self.top, text="okay", command=self.getEditEntry)
@@ -270,10 +272,10 @@ class MainWindow(object):
 
     def searchE(self):
         self.top = tk.Toplevel(self.parent)
-        tk.Label(self.top, text="Field").pack(padx=20, pady=10)
+        tk.Label(self.top, text="Field(optional)").pack(padx=20, pady=10)
         self.e = tk.Entry(self.top)
         self.e.pack(padx=5)
-        tk.Label(self.top, text="quere").pack(padx=20, pady=10)
+        tk.Label(self.top, text="Query").pack(padx=20, pady=10)
         self.e2 = tk.Entry(self.top)
         self.e2.pack(padx=5)
         b = tk.Button(self.top, text="search", command=self.search)
@@ -281,15 +283,18 @@ class MainWindow(object):
         print "search"
 
     def search(self):
-        field = self.e.get()
-        item_search = self.e2.get()
-        self.top.destroy()
-        print field + " " +item_search
-        matches = self.book.search(item_search,field)
-        sub_book = book.Book()
-        sub_book.set_entries(matches)
-        self.address = sub_book.get_str_entries()
-        self.update_list()
+        try:
+            field = self.e.get()
+            item_search = self.e2.get()
+            print field + " " +item_search
+            matches = self.book.search(item_search,field)
+            sub_book = book.Book()
+            sub_book.set_entries(matches)
+            self.address = sub_book.get_str_entries()
+            self.top.destroy()
+            self.update_list()
+        except KeyError:
+            mb.message(mb.WARNING,"This field doesn't exist. Leave it blank or input a valid one.",parent=self.top)
 
     def printPostalE(self):
         try:
@@ -313,13 +318,24 @@ class MainWindow(object):
             self.update_list()
 
     def to_entry(self,value):
+        '''
+        Reconstruct an entry object from the selected string.
+
+        :arg value: The string representing an entry in the book
+        :type value: String
+
+        :returns: An Entry object
+        :rtypes: Entry
+        '''
         attrs = []
         for i in range(len(self.book.get_fields())):
-            attrs.append(value.split('\t')[i].split(":")[1])
+            attrs.append(value.split(DELIM)[i].split(":")[1])
         return entry.Entry(*attrs)
 
     def update_list(self):
+        '''
+        Refresh the list box in the gui.
+        '''
         self.list_box.delete(0,tk.END)
         for item in self.address:
             self.list_box.insert(tk.END, item)
-

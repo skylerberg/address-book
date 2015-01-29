@@ -86,6 +86,11 @@ class Entry:
 
     def to_postal(self):
         '''
+        Generates a postal address which conforms usps postal format.
+        The result is a list of strings, and each string represents one line in postal address.
+
+        :returns: A list of strings
+        :rtype: List
         '''
         name = self.__dict__[FNAME] + " " + self.__dict__[LNAME]
         delivery = self.__dict__[ADDR]
@@ -96,6 +101,7 @@ class Entry:
     def gui_str(self):
         '''
         '''
+        #TODO: display entries in the gui
         ret = ''
         if self.__dict__[FNAME]:
             ret += ("firstname:"+self.__dict__[FNAME]+"\t")

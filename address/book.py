@@ -202,23 +202,26 @@ class Book(object):
 
         :returns: A list of entries containing the string
         :rtype: List
+
         '''
         matches = []
         if not field:
             for entry in self.entries:
                 for key in entry.__dict__:
-                    if (entry.__dict__[key] is not None) and (string.lower() in entry.__dict__[key].lower()):
+                    if (entry.get_attr(key) is not None) and (string.lower() in entry.get_attr(key).lower()):
                         matches.append(entry)
                         break
             return matches
         else:
             for entry in self.entries:
-                if (field in entry.__dict__) and (string.lower() in entry.__dict__[field].lower()):
+                if (string.lower() in entry.get_attr(field).lower()):
                     matches.append(entry)
             return matches
 
     def get_str_entries(self):
         '''
+        Get a list of string representation of all the entries in the book. 
+        This is used for displaying entries in the gui.
         '''
         ret = []
         for entry in self.entries:
@@ -228,11 +231,23 @@ class Book(object):
 
     def get_entry_index(self,entry):
         '''
+        Get the index of an entry in the book.
+
+        :arg entry: The entry object to be located
+        :type entry: Entry
+
+        :returns: The index of the entry
+        :rtype: Int
         '''
         return self.entries.index(entry)
 
     def set_entries(self,entries):
         '''
+        Replace the current list of entries in the book with a new one.
+
+        :arg entries: The new list of entries
+        :type entries: List
+
         '''
         self.entries = entries
 
