@@ -7,7 +7,7 @@ import tkSimpleDialog
 import os
 
 from address.constants import *
-from address.gui.dialogs import OpenDialog, NewDialog, ImportDialog, PickAttribute
+from address.gui import dialogs
 import address.data as data
 from address import book
 from address import entry
@@ -118,14 +118,14 @@ class MainWindow(object):
         self.book.add_field(new_field)
 
     def openl(self):
-        OpenDialog(self.parent)
+        dialogs.OpenDialog(self.parent)
 
     def newl(self):
         """
         creates a tab to place file name
         calls okay button
         """
-        NewDialog(self.parent)
+        dialogs.NewDialog(self.parent)
 
     def mergel(self):
         self.top = tk.Toplevel(self.parent)
@@ -173,7 +173,7 @@ class MainWindow(object):
         need to fix to have self.path, different from
         file name for import
         """
-        ImportDialog(self.parent)
+        dialogs.ImportDialog(self.parent)
 
     def exportl(self):
         #self.top = tk.Toplevel(self.parent)
@@ -336,7 +336,7 @@ class MainWindow(object):
         #tk.Label(self.top, text="Postal line 3").pack(padx=20, pady=10)
 
     def sortbyE(self):
-        selection_box = PickAttribute(self.parent, self.book)
+        selection_box = dialogs.PickAttribute(self.parent, self.book)
         if selection_box.result is not None:
             self.book.sort(selection_box.result)
             self.address = self.book.get_str_entries()
