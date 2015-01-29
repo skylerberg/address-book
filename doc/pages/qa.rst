@@ -23,7 +23,7 @@ that they are exposed to the user through the user interface.
 
 Every other code component should be tested in an automatic fashion so as to
 avoid regressions when new code is tested. This will also guarantee that code
-is tested in a consistent manor by eliminating the possibility of human error
+is tested in a consistent manner by eliminating the possibility of human error
 in the testing process.
 
 We will be using Travis-CI to run our test suite every time code is checked in.
