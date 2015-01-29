@@ -202,7 +202,10 @@ class MainWindow(object):
         for i in range(len(self.book.get_fields())):
             var[self.book.get_fields()[i]] = self.elist[i].get()
 
-        res = utility.has_invalid_field(var)
+        res = utility.has_invalid_field(var[ADDR].strip(),
+                                        var[ZIP_CODE].strip(),
+                                        var[PHONE_NUM].strip(),
+                                        var[EMAIL].strip())
         if not res:
             entry_to_add = entry.Entry(**var)
             if entry_to_add not in self.book.entries:
@@ -250,7 +253,7 @@ class MainWindow(object):
         var = []
         for i in range(len(self.book.get_fields())):
             var.append(self.elist[i].get())
-        res = utility.has_invalid_field(var)
+        res = utility.has_invalid_field()
         if not res:
             entry_pre = self.to_entry(self.value)
             entry_new = entry.Entry(*var)

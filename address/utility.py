@@ -4,37 +4,37 @@ For now, things are simplified..
 '''
 
 import re
-from constants import *
+from address.constants import *
 
 
-def has_invalid_field(fields_all):
+def has_invalid_field(addr, zip_code, phone_num, email):
     '''
-    Validates the format of four attributes: address, zip code, phone number, and email.
-    Return a string indicating the invalid field; return None is all of them are valid.
+    Validates the format of four attributes: address, zip code, phone number,
+    and email. Return a string indicating the invalid field; return None if all
+    of them are valid.
 
-    :arg fields_all: A list containing the 8 mandatory fields in a specific order
-    :type fields_all: List
+    :arg addr: Address
+    :type addr: String
+    :arg zip_code: Address
+    :type zip_code: String
+    :arg phone_num: Address
+    :type phone_num: String
+    :arg email: Address
+    :type email: String
 
-    :returns: A string indicating invalid field.
+    :returns: A string indicating an invalid field.
     :rtype: String
     '''
-    addr = fields_all[2].strip()
-    zip_code = fields_all[5].strip()
-    phone_num = fields_all[6].strip()
-    email = fields_all[7].strip()
-
-    if not validate(ADDR,addr):
+    if not validate(ADDR, addr):
         return ADDR
-    if not validate(ZIP_CODE,zip_code):
+    if not validate(ZIP_CODE, zip_code):
         return ZIP_CODE
-    if not validate(PHONE_NUM,phone_num):
+    if not validate(PHONE_NUM, phone_num):
         return PHONE_NUM
-    if not validate(EMAIL,email):
+    if not validate(EMAIL, email):
         return EMAIL
     return None
 
-
-    return (addr,zip_code,phone_num,email)
 
 def validate(attr, string):  # return value may need to be improved
     '''

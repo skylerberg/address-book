@@ -150,11 +150,6 @@ class ImportDialog(tk.Toplevel):
                 mb.message(mb.ERROR,"File is corrupted!",parent=self.parent)
         else:
             mb.message(mb.WARNING, ("There is already a book named %s, new name pls!") % name, parent=self.parent)
-        self.destroy()
-        try:
-            self.result = address.gui.MainWindow(name, IMPORT, self.import_path)
-        except ValueError:
-            mb.message(mb.ERROR,"File is corrupted!",parent=self.parent)
 
 
 class PickAttribute(tk.Toplevel):
