@@ -8,6 +8,8 @@ import tkFileDialog
 from address.constants import OPEN, NEW, IMPORT
 import address.gui
 import address.data as data
+from address.gui import messagebox as mb
+
 
 
 class OpenDialog(tk.Toplevel):
@@ -135,4 +137,7 @@ class ImportDialog(tk.Toplevel):
         """
         name = self.e.get()
         self.destroy()
-        self.result = address.gui.MainWindow(name, IMPORT, self.import_path)
+        try:
+            self.result = address.gui.MainWindow(name, IMPORT, self.import_path)
+        except ValueError:
+            mb.message(mb.ERROR,"File is corrupted!",parent=self.parent)

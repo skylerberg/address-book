@@ -11,6 +11,7 @@ from address.gui.dialogs import OpenDialog, NewDialog, ImportDialog
 import address.data as data
 from address import book
 from address import entry
+from address.gui import messagebox as mb
 
 
 class MainWindow(object):
@@ -212,17 +213,16 @@ class MainWindow(object):
         var = []
         for i in range(len(self.listFields)):
             var.append(self.elist[i].get())
-        #self.address.append(var)
-#
-        self.book.add_entry(entry.Entry(*var))
-        self.address = self.book.get_str_entries()
-#
-        self.top.destroy()
-        self.list_box.insert(tk.END, self.address[-1])
-        #self.show()
-        #self.address.sort()
-        self.update_list()
-        self.top.destroy()
+
+        entry_to_add = entry.Entry(*var)
+        if entry_to_add not in self.book.entries:
+            self.book.add_entry(entry_to_add)
+            self.address = self.book.get_str_entries()
+            self.list_box.insert(tk.END, self.address[-1])
+            self.update_list()
+            self.top.destroy()
+        else:
+            mb.message(mb.WARNING,"Entry already exists!",parent=self.top)
 
     def deleteE(self):
         first_index = self.list_box.curselection()[0]
@@ -265,23 +265,23 @@ class MainWindow(object):
         for i in range(len(self.listFields)):
             var.append(self.elist[i].get())
 
-        #delete then add new
         entry_pre = self.to_entry(self.value)
         entry_new = entry.Entry(*var)
-        self.book.delete_entry(self.book.get_entry_index(entry_pre))
-
-        self.book.add_entry(entry_new)
-        self.address = self.book.get_str_entries()
+        if entry_new not in self.book.entries:
+            #delete old then add new
+            self.book.delete_entry(self.book.get_entry_index(entry_pre))
+            self.book.add_entry(entry_new)
+            self.address = self.book.get_str_entries()
+            self.list_box.delete(int(self.index))
+            #self.list_box.insert(tk.END, self.address[self.index])
+            self.list_box.insert(tk.END, str(entry_new))
+            self.address.sort()
+            self.update_list()
+            self.top.destroy()
+            print self.address[self.index]
+        else:
+            mb.message(mb.WARNING,"Entry already exists!",parent=self.top)
 #
-        #self.address[self.index] = var
-        #self.top.destroy()
-        self.list_box.delete(int(self.index))
-        #self.list_box.insert(tk.END, self.address[self.index])
-        self.list_box.insert(tk.END, str(entry_new))
-        self.address.sort()
-        self.update_list()
-        self.top.destroy()
-        print self.address[self.index]
 
     def searchE(self):
         self.top = tk.Toplevel(self.parent)
@@ -316,10 +316,7 @@ class MainWindow(object):
         first_index = self.list_box.curselection()[0]
         value = self.address[int(first_index)]
 #
-        attrs = []
-        for i in range(len(self.listFields)):
-            attrs.append(value.split('\t')[i].split(":")[1])
-        entry_to_print = entry.Entry(*attrs)
+        entry_to_print = self.to_entry(value)
         index = self.book.get_entry_index(entry_to_print)
         postal = self.book.get_entry(index).to_postal()
         print postal

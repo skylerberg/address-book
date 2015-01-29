@@ -130,7 +130,7 @@ class Book(object):
         reader = csv.reader(f,delimiter="\t")
         for row in reader:
             #assert(len(row) == 5)#assumption of the input format, without email
-            assert(len(row) == 6)#assumption of the input format, with email
+            #assert(len(row) == 6)#assumption of the input format, with email
             city,state,zip_code = row[0].split("  ")#use 2 spaces(in case city name is two-word, or city/state is missing)
             addr = row[1] +" " + row[2]
             fname = row[3].split("  ")[0]
