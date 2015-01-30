@@ -71,7 +71,7 @@ class TestBook(unittest.TestCase):
         book.add_entry(en1)
         book.add_entry(en2)
         book.add_entry(en3)
-        ret = book.search("ste",ADDR)
+        ret = book.search("ste","Address")
         self.assertEquals(len(ret), 1)
 
     def test_book_sort_with_two_entries(self):
@@ -83,8 +83,8 @@ class TestBook(unittest.TestCase):
         book1.add_entry(en2)
         book2.add_entry(en2)
         book2.add_entry(en1)
-        book1.sort(FNAME)
-        book2.sort(FNAME)
+        book1.sort("First Name")
+        book2.sort("First Name")
         self.assertEquals(book1.get_entry(0), book2.get_entry(0))
 
     def test_book_get_index_of_entry(self):
