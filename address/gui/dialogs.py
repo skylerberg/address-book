@@ -59,14 +59,16 @@ class OpenDialog(tk.Toplevel):
         """
         Open the address book selected by the user.
         """
-        #TODO handle no selection
-        selected_index = self.list_box.curselection()[0]
-        name = self.metadata[int(selected_index)]
-        self.destroy()
         try:
+            selected_index = self.list_box.curselection()[0]
+            name = self.metadata[int(selected_index)]
+            self.destroy()
             self.result = address.gui.MainWindow(name, OPEN)
         except IOError:
             mb.message(mb.ERROR,"Cannot open the file!",parent=self.parent)
+        except IndexError:
+            mb.message(mb.WARNING,"Please select a book!",parent=self)
+
 
 
 class NewDialog(tk.Toplevel):
@@ -100,11 +102,13 @@ class NewDialog(tk.Toplevel):
         Open the address book selected by the user.
         """
         name = self.e.get()
-        if name not in data.get_book_names():
+        if name not in data.get_book_names() and len(name.strip()) > 0:
             self.result = address.gui.MainWindow(name, NEW)
+            self.destroy()
+        elif len(name.strip()) == 0:
+            mb.message(mb.WARNING, "Book name cannot be empty!", parent=self.parent)
         else:
             mb.message(mb.WARNING, ("There is already a book named %s, new name pls!") % name, parent=self.parent)
-        self.destroy()
 
 
 class ImportDialog(tk.Toplevel):
@@ -142,12 +146,14 @@ class ImportDialog(tk.Toplevel):
         Open the address book selected by the user.
         """
         name = self.e.get()
-        if name not in data.get_book_names():
+        if name not in data.get_book_names() and len(name.strip()) > 0:
             self.destroy()
             try:
                 self.result = address.gui.MainWindow(name, IMPORT, self.import_path)
             except ValueError:
                 mb.message(mb.ERROR,"File is corrupted!",parent=self.parent)
+        elif len(name.strip()) == 0:
+            mb.message(mb.WARNING, "Book name cannot be empty!", parent=self.parent)
         else:
             mb.message(mb.WARNING, ("There is already a book named %s, new name pls!") % name, parent=self.parent)
 
@@ -191,8 +197,11 @@ class PickAttribute(tk.Toplevel):
         """
         Select an attribute.
         """
-        #TODO handle no selection
-        selected_index = self.list_box.curselection()[0]
-        field = self.book.get_fields()[int(selected_index)]
-        self.result = NON_DISPLAY_NAMES.get(field, field)
-        self.destroy()
+        try:
+            selected_index = self.list_box.curselection()[0]
+            field = self.book.get_fields()[int(selected_index)]
+            self.result = NON_DISPLAY_NAMES.get(field, field)
+            self.destroy()
+        except:
+            mb.message(mb.WARNING,"Please select an attribute!",parent=self)
+

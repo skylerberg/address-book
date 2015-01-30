@@ -25,14 +25,18 @@ class MainWindow(object):
     def __init__(self, name, action, import_path=None):
         if action == NEW:
             self.book = book.Book()
+            self.book_saved  = False
         elif action == IMPORT:
             self.book = book.Book()
             self.book.import_from(import_path)
+            self.book_saved  = True
         elif action == OPEN:
             self.book = data.load(name)
+            self.book_saved  = True
         self.parent = tk.Tk()
         self.parent.geometry("1500x1250+300+300")
         self.parent.title("Address Book")
+        self.parent.protocol('WM_DELETE_WINDOW', self.exit_handler)
         self.top = self.parent
         self.name = name
         self.value = ""
@@ -127,6 +131,7 @@ class MainWindow(object):
     
         self.top.destroy()
         self.book.add_field(new_field)
+        self.book_saved  = False
 
     def openl(self):
         dialogs.OpenDialog(self.parent)
@@ -177,10 +182,11 @@ class MainWindow(object):
                 self.book =b1
                 self.address = b1.get_str_entries()
                 self.update_list()
+                self.book_saved  = False
             print 'merging'
         if name1==name2 and name1 in book_names:
             mb.message(mb.WARNING,\
-                    "Are you sure you  want to merge the same books together,",\
+                    "Are you sure you  want to merge the same books together",\
                     parent=self.top)
         else:
             mb.message(mb.WARNING,\
@@ -190,9 +196,11 @@ class MainWindow(object):
     def saveasl(self):
         new_name = tkSimpleDialog.askstring("New name for the book", "new name", parent = self.parent)
         data.save(new_name, self.book)
+        #self.book_saved  = True
 
     def savel(self):
         data.save(self.name, self.book)
+        self.book_saved  = True
         print "Saving  book :" + self.name 
 
     def importl(self):
@@ -239,6 +247,7 @@ class MainWindow(object):
                 self.list_box.insert(tk.END, self.address[-1])
                 self.update_list()
                 self.top.destroy()
+                self.book_saved  = False
             else:
                 mb.message(mb.WARNING, "Entry already exists!", parent=self.top)
         else:
@@ -253,6 +262,7 @@ class MainWindow(object):
                 self.book.delete_entry(self.book.get_entry_index(entry_to_delete))
                 self.address = self.book.get_str_entries()
                 self.update_list()
+                self.book_saved  = False
         except IndexError:
             mb.message(mb.WARNING,"Select an entry first!",parent=self.parent)
 
@@ -297,6 +307,7 @@ class MainWindow(object):
                 self.address.sort()
                 self.update_list()
                 self.top.destroy()
+                self.book_saved  = False
                 print self.address[self.index]
             else:
                 mb.message(mb.WARNING,"Entry already exists!",parent=self.top)
@@ -382,3 +393,18 @@ class MainWindow(object):
             time= strings.format(**item.__dict__)
             self.list_box.insert(tk.END,time)
             strings=""
+
+    def exit_handler(self):
+        '''
+        Customized handler for closing window event.
+        This is used for checking if a user closes window before saving the book
+        '''
+        if not self.book_saved:
+            discard = mb.message(mb.ASK,\
+                    "Changes are not saved yet. Do you want to discard the changes?" \
+                    "\n('Yes' to discard changes and quit, 'No' to go back ) ",\
+                    parent = self.parent)
+            if discard:
+                self.parent.destroy()
+        else:
+            self.parent.destroy()
