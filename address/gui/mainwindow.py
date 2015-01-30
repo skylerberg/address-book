@@ -64,8 +64,18 @@ class MainWindow(object):
         self.list_box.config(yscrollcommand=scroll_bar2.set)
         self.address.sort()
 
-        for item in self.address:
-            self.list_box.insert(tk.END, item)
+        strings =""
+        for item in self.book.entries:
+            
+            for key in item.__dict__.keys():
+                strings += key +":  {" + key + "}"
+                added_distance = 45+len(key)
+                if (added_distance ==45):
+                    added_distance = 50
+                strings += (" " * added_distance)
+            time= strings.format(**item.__dict__)
+            self.list_box.insert(tk.END,time)
+            strings=""
 
     def build_submenus(self):
         self.add_file_menu()
@@ -126,6 +136,19 @@ class MainWindow(object):
 
     def mergel(self):
         self.top = tk.Toplevel(self.parent)
+        list_frame = tk.Frame(self.top)
+        scroll = tk.Scrollbar(list_frame)
+        scroll.pack(side=tk.RIGHT, fill=tk.Y)
+        text = tk.Text(list_frame, yscrollcommand=scroll.set, width=45, height=20)
+        text.pack()
+        scroll.configure(command=text.yview)
+        list_frame.pack()
+        
+        book_names = data.get_book_names()
+        text.insert(tk.END, "\nHere is a list of the current address books:\n\n")
+        for i in book_names:
+             text.insert(tk.END, i+"\n")
+        text.insert(tk.END, " \n\nBook 2 will be merged to Book 1. Please type the name of the books you want to merge.")
         tk.Label(self.top, text="Book 1").pack(padx=20, pady=10)
         self.e = tk.Entry(self.top)
         self.e.pack(padx=5)
@@ -135,6 +158,7 @@ class MainWindow(object):
         b = tk.Button(self.top, text="okay", command=self.okayMerge)
         b.pack(pady=5)
 
+
     def okayMerge(self):
         # open file one and file 2
         # then merger
@@ -142,7 +166,7 @@ class MainWindow(object):
         book_names = data.get_book_names()
         name1 = self.e.get()
         name2 = self.e2.get()
-        if name1 in book_names and name2 in book_names:
+        if name1 in book_names and name2 in book_names and name1!=name2:
             self.top.destroy()
             print name1, name2
             b1 = data.load(name1)
@@ -154,6 +178,10 @@ class MainWindow(object):
                 self.address = b1.get_str_entries()
                 self.update_list()
             print 'merging'
+        if name1==name2 and name1 in book_names:
+            mb.message(mb.WARNING,\
+                    "Are you sure you  want to merge the same books together,",\
+                    parent=self.top)
         else:
             mb.message(mb.WARNING,\
                     "At least one of the books doesn't exist, make sure the book is saved before merging",\
@@ -342,5 +370,15 @@ class MainWindow(object):
         Refresh the list box in the gui.
         '''
         self.list_box.delete(0,tk.END)
-        for item in self.address:
-            self.list_box.insert(tk.END, item)
+        strings =""
+        for item in self.book.entries:
+            
+            for key in item.__dict__.keys():
+                strings += key +":  {" + key + "}"
+                added_distance = 45+len(key)
+                if (added_distance ==45):
+                    added_distance = 50
+                strings += (" " * added_distance)
+            time= strings.format(**item.__dict__)
+            self.list_box.insert(tk.END,time)
+            strings=""
