@@ -279,10 +279,10 @@ class MainWindow(object):
         for i in range(len(self.book.get_fields())):
             tk.Label(self.top, text=field_names[i]).pack(padx=20, pady=10)
             self.elist.append(tk.Entry(self.top))
-            if not field_names[i] in self.value:
-                self.elist[i].insert(0,"")
-            else:
-                self.elist[i].insert(0, self.value.split(DELIM)[i].split(":")[1])
+            #if not field_names[i] in self.value:
+            #    self.elist[i].insert(0,"")
+            #else:
+            self.elist[i].insert(0, self.value.split(DELIM)[i].split(":")[1])
             
             self.elist[i].pack(padx=5)
         self.index = int(first_index)
