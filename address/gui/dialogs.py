@@ -83,7 +83,7 @@ class NewDialog(tk.Toplevel):
 
         self.bind("<Return>", self._open)
 
-        tk.Label(self, text="BookName").pack(padx=20, pady=10)
+        tk.Label(self, text="Book name").pack(padx=20, pady=10)
 
         self.e = tk.Entry(self)
         self.e.pack(padx=25)
@@ -127,7 +127,7 @@ class ImportDialog(tk.Toplevel):
             self.parent = parent
 
             self.bind("<Return>", self._open)
-            tk.Label(self, text="BookName").pack(padx=20, pady=10)
+            tk.Label(self, text="Book name").pack(padx=20, pady=10)
             self.e = tk.Entry(self)
             self.e.pack(padx=5)
             b = tk.Button(self, text="okay", command=self._open)
