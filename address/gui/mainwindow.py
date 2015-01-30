@@ -277,7 +277,7 @@ class MainWindow(object):
 
     def searchE(self):
         self.top = tk.Toplevel(self.parent)
-        tk.Label(self.top, text="Field(optional)").pack(padx=20, pady=10)
+        tk.Label(self.top, text="Field (optional)").pack(padx=20, pady=10)
         self.e = tk.Entry(self.top)
         self.e.pack(padx=5)
         tk.Label(self.top, text="Query").pack(padx=20, pady=10)
