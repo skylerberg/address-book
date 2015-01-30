@@ -37,3 +37,6 @@ class TestValidate(unittest.TestCase):
     def test_invalid_zip_plus_4(self):
         self.assertEquals(utility.validate(utility.ZIP_CODE, "12345-34567"),
                           None)
+
+    def test_has_invalid_field(self):
+        self.assertEquals(utility.has_invalid_field("1 abc st","12345","1234567890","bademail"),"Email")
