@@ -5,7 +5,7 @@ import os
 import Tkinter as tk
 import tkFileDialog
 
-from address.constants import OPEN, NEW, IMPORT
+from address.constants import *
 import address.gui
 import address.data as data
 from address.gui import messagebox as mb
@@ -171,7 +171,7 @@ class PickAttribute(tk.Toplevel):
         self.list_box.config(yscrollcommand=scroll_bar.set)
 
         for attribute in book.get_fields():
-            self.list_box.insert(tk.END, attribute)
+            self.list_box.insert(tk.END, DISPLAY_NAMES.get(attribute, attribute))
         self.book = book
         button_frame = tk.Frame(self)
         button_frame.pack(side=tk.BOTTOM)
@@ -193,5 +193,6 @@ class PickAttribute(tk.Toplevel):
         """
         #TODO handle no selection
         selected_index = self.list_box.curselection()[0]
-        self.result = self.book.get_fields()[int(selected_index)]
+        field = self.book.get_fields()[int(selected_index)]
+        self.result = NON_DISPLAY_NAMES.get(field, field)
         self.destroy()
