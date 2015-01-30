@@ -199,7 +199,6 @@ class MainWindow(object):
         var = {}
         for i in range(len(self.book.get_fields())):
             var[self.book.get_fields()[i]] = self.elist[i].get()
-
         res = utility.has_invalid_field(var[ADDR].strip(),
                                         var[ZIP_CODE].strip(),
                                         var[PHONE_NUM].strip(),
@@ -232,29 +231,32 @@ class MainWindow(object):
     def editE(self):
         try:
             first_index = self.list_box.curselection()[0]
-            print 'index',first_index
-            self.value = self.address[int(first_index)]
-            self.top = tk.Toplevel(self.parent)
-            self.elist= []
-            for i in range(len(self.book.get_fields())):
-                tk.Label(self.top, text=self.book.get_fields()[i]).pack(padx=20, pady=10)
-                self.elist.append(tk.Entry(self.top))
-                self.elist[i].insert(0, self.value.split(DELIM)[i].split(":")[1])
-                self.elist[i].pack(padx=5)
-            self.index = int(first_index)
-            b = tk.Button(self.top, text="okay", command=self.getEditEntry)
-            b.pack(pady=5)
         except IndexError:
             mb.message(mb.WARNING,"Select an entry first!",parent=self.parent)
+        print 'index',first_index
+        self.value = self.address[int(first_index)]
+        self.top = tk.Toplevel(self.parent)
+        self.elist= []
+        for i in range(len(self.book.get_fields())):
+            tk.Label(self.top, text=self.book.get_fields()[i]).pack(padx=20, pady=10)
+            self.elist.append(tk.Entry(self.top))
+            self.elist[i].insert(0, self.value.split(DELIM)[i].split(":")[1])
+            self.elist[i].pack(padx=5)
+        self.index = int(first_index)
+        b = tk.Button(self.top, text="okay", command=self.getEditEntry)
+        b.pack(pady=5)
 
     def getEditEntry(self):
-        var = []
+        var = {}
         for i in range(len(self.book.get_fields())):
-            var.append(self.elist[i].get())
-        res = utility.has_invalid_field()
+            var[self.book.get_fields()[i]] = self.elist[i].get()
+        res = utility.has_invalid_field(var[ADDR].strip(),
+                                        var[ZIP_CODE].strip(),
+                                        var[PHONE_NUM].strip(),
+                                        var[EMAIL].strip())
         if not res:
             entry_pre = self.to_entry(self.value)
-            entry_new = entry.Entry(*var)
+            entry_new = entry.Entry(**var)
             if entry_new not in self.book.entries:
                 #delete old then add new
                 self.book.delete_entry(self.book.get_entry_index(entry_pre))
@@ -301,16 +303,16 @@ class MainWindow(object):
     def printPostalE(self):
         try:
             first_index = self.list_box.curselection()[0]
-            value = self.address[int(first_index)]
-            entry_to_print = self.to_entry(value)
-            index = self.book.get_entry_index(entry_to_print)
-            postal = self.book.get_entry(index).to_postal()
-            print postal
-            self.top = tk.Toplevel(self.parent)
-            for line in postal:
-                tk.Label(self.top, text=line).pack(padx=20, pady=10)
         except IndexError:
             mb.message(mb.WARNING,"Select an entry first!",parent=self.parent)
+        value = self.address[int(first_index)]
+        entry_to_print = self.to_entry(value)
+        index = self.book.get_entry_index(entry_to_print)
+        postal = self.book.get_entry(index).to_postal()
+        print postal
+        self.top = tk.Toplevel(self.parent)
+        for line in postal:
+            tk.Label(self.top, text=line).pack(padx=20, pady=10)
 
     def sortbyE(self):
         selection_box = dialogs.PickAttribute(self.parent, self.book)
