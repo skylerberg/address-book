@@ -237,8 +237,9 @@ class MainWindow(object):
         self.value = self.address[int(first_index)]
         self.top = tk.Toplevel(self.parent)
         self.elist= []
+        field_names = map(lambda field: DISPLAY_NAMES.get(field, field), self.book.get_fields())
         for i in range(len(self.book.get_fields())):
-            tk.Label(self.top, text=self.book.get_fields()[i]).pack(padx=20, pady=10)
+            tk.Label(self.top, text=field_names[i]).pack(padx=20, pady=10)
             self.elist.append(tk.Entry(self.top))
             self.elist[i].insert(0, self.value.split(DELIM)[i].split(":")[1])
             self.elist[i].pack(padx=5)
