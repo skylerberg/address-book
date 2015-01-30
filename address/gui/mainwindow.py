@@ -40,8 +40,6 @@ class MainWindow(object):
         self.elist=[]
         print name
         self.address=self.book.get_str_entries()
-        self.listFields = ["First Name", "Last Name", "Address", "City" ,"State", "Zip code", "Phone number", "Email"] 
-        #self.top = Toplevel(self.parent)
         self._menu = tk.Menu(self.parent, name='menu')
         self.build_submenus()
         self.top.config(menu=self._menu)
@@ -58,8 +56,6 @@ class MainWindow(object):
         scroll_bar.pack(side=tk.RIGHT, fill=tk.Y)
         scroll_bar2 = tk.Scrollbar(list_frame, orient=tk.HORIZONTAL)
         scroll_bar2.pack(side=tk.BOTTOM, fill=tk.X)
-        #helv36 = tkFont.Font(family='Helvetica',size=1, weight='bold')
-        #self.list_box = tk.Listbox(list_frame, selectmode=tk.SINGLE, width=150, height=38, font = helv36,bd=7)
         self.list_box = tk.Listbox(list_frame, selectmode=tk.SINGLE, width=150, height=38, cursor="hand1")
         self.list_box.pack(side=tk.LEFT, fill=tk.Y)
         scroll_bar.config(command=self.list_box.yview)
@@ -189,10 +185,12 @@ class MainWindow(object):
         print "add"
         self.top = tk.Toplevel(self.parent)
         self.elist= []
-        for i in range(len(self.book.get_fields())):
-            tk.Label(self.top, text=self.book.get_fields()[i]).pack(padx=20, pady=10)
+        field_names = map(lambda field: DISPLAY_NAMES.get(field, field), self.book.get_fields())
+        default_values = map(lambda field: DEFAULTS.get(field, ""), self.book.get_fields())
+        for i in range(len(field_names)):
+            tk.Label(self.top, text=field_names[i]).pack(padx=20, pady=10)
             self.elist.append(tk.Entry(self.top))
-            self.elist[i].insert(0, self.book.get_fields()[i])
+            self.elist[i].insert(0, default_values[i])
             self.elist[i].pack(padx=5)
         b = tk.Button(self.top, text="okay", command=self.getaddEntry)
         b.pack(pady=5)
