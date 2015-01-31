@@ -29,7 +29,7 @@ class MainWindow(object):
         elif action == IMPORT:
             self.book = book.Book()
             self.book.import_from(import_path)
-            self.book_saved  = True
+            self.book_saved  = False
         elif action == OPEN:
             self.book = data.load(name)
             self.book_saved  = True
@@ -66,20 +66,8 @@ class MainWindow(object):
         scroll_bar2.config(command=self.list_box.xview)
         self.list_box.config(yscrollcommand=scroll_bar.set)
         self.list_box.config(yscrollcommand=scroll_bar2.set)
-        self.address.sort()
-
-        strings =""
-        for item in self.book.entries:
-            
-            for key in item.__dict__.keys():
-                strings += key +":  {" + key + "}"
-                added_distance = 45+len(key)
-                if (added_distance ==45):
-                    added_distance = 50
-                strings += (" " * added_distance)
-            time= strings.format(**item.__dict__)
-            self.list_box.insert(tk.END,time)
-            strings=""
+        #self.address.sort()
+        self.update_list()
 
     def build_submenus(self):
         self.add_file_menu()
@@ -259,6 +247,7 @@ class MainWindow(object):
             value = self.address[int(first_index)]
             if mb.message(mb.ASK,"Do you really want to delete it? There is no going back",parent=self.parent):
                 entry_to_delete = self.to_entry(value)
+                print entry_to_delete
                 self.book.delete_entry(self.book.get_entry_index(entry_to_delete))
                 self.address = self.book.get_str_entries()
                 self.update_list()
@@ -386,8 +375,12 @@ class MainWindow(object):
         '''
         self.list_box.delete(0,tk.END)
         strings =""
-        for item in self.book.entries:
-            
+        entries = []
+        for value in self.address:
+            entries.append(self.to_entry(value))
+
+        #for item in self.book.entries:
+        for item in entries:
             for key in item.__dict__.keys():
                 strings += key +":  {" + key + "}"
                 added_distance = 45+len(key)
