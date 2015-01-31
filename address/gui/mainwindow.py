@@ -50,6 +50,12 @@ class MainWindow(object):
         self.show()
 
     def show(self):
+        '''
+        Many window for address book, shows and places everything where it needs to go
+        Creates a scroll bar, a listbox, and frame
+        args: takes in a main window
+        returns: None
+        '''
         tk.Label(self.top,
                  text="Addresses Book "+self.name,
                  font=("Helvetica", 16)
@@ -70,11 +76,22 @@ class MainWindow(object):
         self.update_list()
 
     def build_submenus(self):
+        '''
+        adds sub menus to main menu
+        args: mainwindow
+        returns: None
+        '''
         self.add_file_menu()
         self.add_tool_menu()
         # the scroll click bar again here
 
     def add_file_menu(self):
+        '''
+        Adds buttons for each book listed. Example of operations include New, open. 
+        Creates a cascading window off of the build menu.
+        args: mainwindow
+        returns: None
+        '''
         fmenu = tk.Menu(self._menu, name='muenu')
         self._menu.add_cascade(label='File', menu=fmenu, underline=0)
         labels = ('Open', 'New', 'Save', 'Save As', 'Import', 'Export', 'Merge')
@@ -87,6 +104,12 @@ class MainWindow(object):
         fmenu.add_command(label=labels[6], command=self.mergel)
 
     def add_tool_menu(self):
+        '''
+        Adds buttons for each entry listed. Example of operations include add entry, sort.
+        Creates a cascading window off of the build menu.
+        args: mainwindow
+        returns: None
+        '''
         fmenu = tk.Menu(self._menu, name='fmenu')
         self._menu.add_cascade(label='Tools', menu=fmenu, underline=0)
         labels = ('Add entry',
@@ -105,6 +128,13 @@ class MainWindow(object):
         fmenu.add_command(label=labels[6], command=self.newFieldE)
 
     def newFieldE(self):
+        '''
+        creates a box for inputing of a new field, and a check okay button. This function goes to self.fieldCheck.
+        args: mainwindow
+        return
+        def show(self):
+        '''
+
         self.top = tk.Toplevel(self.parent)
         tk.Label(self.top, text="New Field").pack(padx=20, pady=10)
 
@@ -115,6 +145,12 @@ class MainWindow(object):
         b.pack(pady=5)
 
     def fieldCheck(self):
+        '''
+        Grabs the name of the new field. Add this new field to the list of fields in the book.
+        Destroys toplayer where box is. . 
+        args: mainwindow
+        returns: None
+        '''
         new_field = self.e.get()
     
         self.top.destroy()
@@ -122,12 +158,28 @@ class MainWindow(object):
         self.book_saved  = False
 
     def openl(self):
+        '''
+        Calls open Dialog.
+        args: mainwindow
+        returns: None
+        '''
         dialogs.OpenDialog(self.parent)
 
     def newl(self):
+        '''
+        Calls New Dialog.
+        args: mainwindow
+        returns: None
+        '''
         dialogs.NewDialog(self.parent)
 
     def mergel(self):
+        '''
+        Creates a box/layer which displays the list of books in the directory. Creates two boxes
+        to grab the two boxes to merge. This calls okaymerge
+        args: mainwindow
+        returns: None
+        '''
         self.top = tk.Toplevel(self.parent)
         list_frame = tk.Frame(self.top)
         scroll = tk.Scrollbar(list_frame)
@@ -153,9 +205,15 @@ class MainWindow(object):
 
 
     def okayMerge(self):
+        '''
+        Gets the book names from the input from user.
+        Calls merge function, does input validation.
+        args: mainwindow
+        returns: None
+        '''
         # open file one and file 2
         # then merger
-
+        
         book_names = data.get_book_names()
         name1 = self.e.get()
         name2 = self.e2.get()
@@ -182,19 +240,40 @@ class MainWindow(object):
                     parent=self.top)
 
     def saveasl(self):
+        '''
+        Creates a tkdialog box. 
+        Calls save function
+        args: mainwindow
+        returns: None
+        '''
         new_name = tkSimpleDialog.askstring("New name for the book", "new name", parent = self.parent)
         data.save(new_name, self.book)
         #self.book_saved  = True
 
     def savel(self):
+        '''
+        Calls save and changing saved bool to True.
+        args: mainwindow
+        returns: None
+        '''
         data.save(self.name, self.book)
         self.book_saved  = True
         print "Saving  book :" + self.name 
 
     def importl(self):
+        '''
+        Calls ImportDialog
+        args: mainwindow
+        returns: None
+        '''
         dialogs.ImportDialog(self.parent)
 
     def exportl(self):
+        '''
+        Creates a box for export path. Calls export function.
+        args: mainwindow
+        returns: None
+        '''
         self.export_path = tkFileDialog.asksaveasfilename(
                                     defaultextension=".tsv",
                                     filetypes=[("tab separate value","*.tsv")],
@@ -206,6 +285,12 @@ class MainWindow(object):
             self.book.export_to(range(len(self.book)),self.export_path)
 
     def addE(self):
+        '''
+        Creates a box that contains all fields with text entry boxes below each label field. 
+        Calls getaddEntry
+        args: mainwindow
+        returns: None
+        '''
         print "add"
         self.top = tk.Toplevel(self.parent)
         self.elist= []
@@ -220,6 +305,12 @@ class MainWindow(object):
         b.pack(pady=5)
 
     def getaddEntry(self):
+        '''
+        Grabs entries from addE function. Places each value into that given entries place
+        in the entries' list. Does input validation.
+        args: mainwindow
+        returns: None
+        '''
         var = {}
         for i in range(len(self.book.get_fields())):
             var[self.book.get_fields()[i]] = self.elist[i].get()
@@ -242,6 +333,12 @@ class MainWindow(object):
             mb.message(mb.WARNING, ("%s is invalid!") % res, parent=self.top)
 
     def deleteE(self):
+        '''
+        Grabs entries from selection. Asks user if wants to delete. 
+        Calls delete_entry function. Updates address lists
+        args: mainwindow
+        returns: None
+        '''
         try:
             first_index = self.list_box.curselection()[0]
             value = self.address[int(first_index)]
@@ -256,6 +353,12 @@ class MainWindow(object):
             mb.message(mb.WARNING,"Select an entry first!",parent=self.parent)
 
     def editE(self):
+        '''
+        Grabs selected entry. Creates a box that contains all fields with text entry boxes below
+        each label field. Calls getEditEntry
+        args: mainwindow
+        returns: None
+        '''
         try:
             first_index = self.list_box.curselection()[0]
         except IndexError:
@@ -279,6 +382,12 @@ class MainWindow(object):
         b.pack(pady=5)
 
     def getEditEntry(self):
+        '''
+        Grabs entries from editE function. Places each value into that given entries place
+        in the entries' list. Does input validation.
+        args: mainwindow
+        returns: None
+        '''
         var = {}
         for i in range(len(self.book.get_fields())):
             var[self.book.get_fields()[i]] = self.elist[i].get()
@@ -308,6 +417,11 @@ class MainWindow(object):
             mb.message(mb.WARNING, ("%s is invalid!") % res, parent=self.top)
 
     def searchE(self):
+        '''
+        Creates a box for  a field and what you want to search for. Calls search function
+        args: mainwindow
+        returns: None
+        '''
         self.top = tk.Toplevel(self.parent)
         tk.Label(self.top, text="Field (optional)").pack(padx=20, pady=10)
         self.e = tk.Entry(self.top)
@@ -320,6 +434,12 @@ class MainWindow(object):
         print "search"
 
     def search(self):
+        '''
+        Grabs elements from searchE function. Calls search in book and updates the list based on this.
+        Does input validation.
+        args: mainwindow
+        returns: None
+        '''
         try:
             field = self.e.get()
             item_search = self.e2.get()
@@ -334,6 +454,12 @@ class MainWindow(object):
             mb.message(mb.WARNING,"This field doesn't exist. Leave it blank or input a valid one.",parent=self.top)
 
     def printPostalE(self):
+        '''
+        Grabs entry from selected. Gets information about that address.
+        Calls, to_postal and to_entry. Displays in a new window the ups postal tag
+        args: mainwindow
+        returns: None
+        '''
         try:
             first_index = self.list_box.curselection()[0]
         except IndexError:
@@ -348,6 +474,12 @@ class MainWindow(object):
             tk.Label(self.top, text=line).pack(padx=20, pady=10)
 
     def sortbyE(self):
+        '''
+        Creates a dialog box that list all possible field to search from.Calls the sort function.
+        Updates the book's entries order. 
+        args: mainwindow
+        returns: None
+        '''
         selection_box = dialogs.PickAttribute(self.parent, self.book)
         if selection_box.result is not None:
             self.book.sort(selection_box.result)
